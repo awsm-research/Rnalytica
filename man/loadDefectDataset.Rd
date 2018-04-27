@@ -8,6 +8,8 @@ loadDefectDataset(system_name, corpus = "")
 }
 \arguments{
 \item{system_name}{system_name name}
+
+\item{corpus}{corpus}
 }
 \value{
 an object of data
