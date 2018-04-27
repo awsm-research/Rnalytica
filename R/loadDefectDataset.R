@@ -17,6 +17,9 @@
 loadDefectDataset <- function(system_name,corpus=""){
 #     listData <- load(system.file("data/listDataset.rda",package="DefectData"))
     
+    suppressWarnings(library(e1071))
+    suppressWarnings(library(foreign))
+    
     corpus <- ifelse(corpus == "", listDataset[listDataset$system == system_name,]$corpus,corpus)
 
     read.mccabe <- function(system_name){
