@@ -12,7 +12,8 @@ Depends:
 	e1071,
 	pROC,
 	randomForest,
-	reshape2
+	reshape2,
+	foreign
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
