@@ -16,12 +16,11 @@
 #' data$data
 #' 
 loadDefectDataset <- function(system_name,corpus=""){
-#     listData <- load(system.file("data/listDataset.rda",package="DefectData"))
 
     corpus <- ifelse(corpus == "", listDataset[listDataset$system == system_name,]$corpus,corpus)
 
     read.mccabe <- function(system_name){
-        filename <- system.file("extdata/terapromise/mccabe",paste0(system_name,".arff"), package = "DefectData")
+        filename <- system.file("extdata/terapromise/mccabe",paste0(system_name,".arff"), package = "Rnalytica")
         data <- read.arff(filename)
         dep <- "Defective"
         switch(system_name, 
@@ -40,7 +39,7 @@ loadDefectDataset <- function(system_name,corpus=""){
     }
     
     read.ck <- function(system_name){
-        filename <- system.file("extdata/terapromise/ck",paste0(system_name,".csv"), package = "DefectData")
+        filename <- system.file("extdata/terapromise/ck",paste0(system_name,".csv"), package = "Rnalytica")
         data <- read.csv(filename)
         dep <- "bug" 
         data[,dep] <- ifelse(data[,dep] > 0, T, F)
@@ -49,7 +48,7 @@ loadDefectDataset <- function(system_name,corpus=""){
     }
     
     read.eclipse <- function(system_name){
-        filename <- system.file("extdata/zimmermann/",paste0(system_name,".csv"), package = "DefectData")
+        filename <- system.file("extdata/zimmermann/",paste0(system_name,".csv"), package = "Rnalytica")
         data <- read.csv(filename, sep=";")
         dep <- "post"
         indep <- c("pre","ACD","FOUT_avg","FOUT_max","FOUT_sum","MLOC_avg","MLOC_max","MLOC_sum","NBD_avg","NBD_max","NBD_sum","NOF_avg","NOF_max","NOF_sum","NOI","NOM_avg","NOM_max","NOM_sum","NOT","NSF_avg","NSF_max","NSF_sum","NSM_avg","NSM_max","NSM_sum","PAR_avg","PAR_max","PAR_sum","TLOC","VG_avg","VG_max","VG_sum")
@@ -59,7 +58,7 @@ loadDefectDataset <- function(system_name,corpus=""){
     }
     
     read.kim <- function(system_name){
-        filename <- system.file("extdata/kim",paste0(system_name,".arff"), package = "DefectData")
+        filename <- system.file("extdata/kim",paste0(system_name,".arff"), package = "Rnalytica")
         data <- read.arff(filename)
         dep <- "isDefective"
         indep <- colnames(data)[!colnames(data) %in% c(dep,"defect_num")]
@@ -69,7 +68,7 @@ loadDefectDataset <- function(system_name,corpus=""){
     
     
     read.ambros <- function(system_name){
-        filename <- system.file("extdata/ambros/",paste0(system_name,".csv"), package = "DefectData")
+        filename <- system.file("extdata/ambros/",paste0(system_name,".csv"), package = "Rnalytica")
         data <- read.csv(filename, sep=";")
         dep <- "bugs"
         indep <- colnames(data)[c(2:16)]
