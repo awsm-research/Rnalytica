@@ -72,6 +72,10 @@ fit <-
 
     performance <- NULL
     importance <- NULL
+    # Generate model formula
+    f <-
+      as.formula(paste0(dep, " ~ ", paste0(indep, collapse = "+")))
+    
     if (validation != 'no') {
       # boot and cv
       for (r in 1:repeats) {
@@ -89,22 +93,18 @@ fit <-
           # Generate testing dataset
           testing <- data[-unique(indices),]
 
-          # Generate model formula
-          f <-
-            as.formula(paste0(dep, " ~ ", paste0(indep, collapse = "+")))
-
           # Data Preprocessing (default - no)
           if (rebalance == "down") {
             # Downsampling
             training <-
               downSample(x = training[, indep],
-                         y = training[, dep],
+                         y = factor(training[, dep]),
                          yname = dep)
           } else if (rebalance == "up") {
             # Upsampling
             training <-
               upSample(x = training[, indep],
-                       y = training[, dep],
+                       y = factor(training[, dep]),
                        yname = dep)
           } # else no
 
