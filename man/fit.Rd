@@ -4,9 +4,9 @@
 \alias{fit}
 \title{Universal fit function}
 \usage{
-fit(data, dep, indep, classifier = "LR", classifier.params = list(RF.ntree =
-  100, C5.0.trials = 40, C5.0.rules = TRUE), rebalance = "NO",
-  validation = "BOOT", validation.params = list(CV.k = 10, BOOT.N = 100),
+fit(data, dep, indep, classifier = "lr", classifier.params = list(rf.ntree =
+  100, c5.0.trials = 40, c5.0.rules = TRUE), rebalance = "no",
+  validation = "boot", validation.params = list(cv.k = 10, boot.n = 100),
   prob.threshold = 0.5, repeats = 1)
 }
 \arguments{
@@ -16,15 +16,15 @@ fit(data, dep, indep, classifier = "LR", classifier.params = list(RF.ntree =
 
 \item{indep}{a vector of characters for independent variables}
 
-\item{classifier}{a character for classifier techniques, i.e., LR, RF, C5.0, and NB (default: "LR")}
+\item{classifier}{a character for classifier techniques, i.e., lr, rf, c5.0, and nb (default: "lr")}
 
-\item{classifier.params}{a list of parameters for an input classifier technique (default: list(RF.ntree = 100, C5.0.trials = 40, C5.0.rules = TRUE)}
+\item{classifier.params}{a list of parameters for an input classifier technique (default: list(rf.ntree = 100, c5.0.trials = 40, c5.0.rules = TRUE)}
 
-\item{rebalance}{a character for a choice of data sampling techniques, i.e., UP for upsampling, DOWN for downsampling, and NO for no-sampling (default: "NO")}
+\item{rebalance}{a character for a choice of data sampling techniques, i.e., up for upsampling, down for downsampling, and no for no-sampling (default: "NO")}
 
-\item{validation}{a character for a choice of validation techniques, i.e., BOOT for bootstrap validation technique, and CV for cross-validation technique (default: "BOOT")}
+\item{validation}{a character for a choice of validation techniques, i.e., boot for bootstrap validation technique, cv for cross-validation technique, and no for constructing a model with the whole dataset without model validation (default: "boot")}
 
-\item{validation.params}{a list of parameters for an input validation techniques (default: list(CV.k = 10, BOOT.N = 100))}
+\item{validation.params}{a list of parameters for an input validation techniques (default: list(cv.k = 10, boot.n = 100))}
 
 \item{prob.threshold}{a numeric for probability threshold (default: 0.5)}
 
