@@ -66,7 +66,7 @@ fit <-
                       returnTrain = TRUE)
       }
       seq.length <- validation.params$cv.k
-    } else if (validation != 'NO') {
+    } else if (validation != 'no') {
       stop('Invalid input validation technique')
     }
 
@@ -111,7 +111,7 @@ fit <-
           if (classifier == "lr") {
             m <- glm(f, data = training, family = "binomial")
             importance <-
-              rbind(importance, cbind(repetition = r, Anova(m)$"LR Chisq"))
+              rbind(importance, c(repetition = r, Anova(m)$"LR Chisq"))
             prob <- predict(m, testing, type = "response")
           } else if (classifier == "rf") {
             m <- randomForest(x = training[, indep],
@@ -120,7 +120,7 @@ fit <-
             prob <-
               predict(m, newdata = testing[, indep], type = 'prob')[, "TRUE"]
             importance <-
-              rbind(importance, cbind(repetition = r, varImp(m)$Overall))
+              rbind(importance, c(repetition = r, varImp(m)$Overall))
           } else if (classifier == "c5.0") {
             m <- C5.0(
               training[, indep],
@@ -131,7 +131,7 @@ fit <-
             prob <-
               predict(m, newdata = testing, type = "prob")[, "TRUE"]
             importance <-
-              rbind(importance, cbind(repetition = r, varImp(m)$Overall))
+              rbind(importance, c(repetition = r, varImp(m)$Overall))
           } else if (classifier == "nb") {
             m <- naiveBayes(f, data = training)
             prob <-
@@ -151,7 +151,7 @@ fit <-
             }
             colnames(genericVarImp) <- indep
             importance <-
-              rbind(importance, cbind(repetition = r, genericVarImp))
+              rbind(importance, c(repetition = r, genericVarImp))
           }
 
           # Compute performance
@@ -159,15 +159,16 @@ fit <-
             # The dependent variable must be factor for rf and c5.0
             performance <-
               rbind(performance,
-                    cbind(repetition = r, performance.calculation(outcome[-unique(indices)], prob, prob.threshold)))
+                    c(repetition = r, performance.calculation(outcome[-unique(indices)], prob, prob.threshold)))
           } else {
             performance <-
               rbind(performance,
-                    cbind(repetition =r, performance.calculation(testing[, dep], prob, prob.threshold)))
+                    c(repetition =r, performance.calculation(testing[, dep], prob, prob.threshold)))
           }
 
         } # n-bootstrap or k-cv loop END
       } # Repetition loop END
+      performance <- data.frame(performance)
       importance <- data.frame(importance)
       names(importance) <- c('repetition', indep)
     } #else no validation - constructing a model with the whole dataset
