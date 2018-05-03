@@ -70,13 +70,13 @@ fit <-
       stop('Invalid input validation technique')
     }
 
+    performance <- NULL
+    importance <- NULL
     if (validation != 'no') {
       # boot and cv
       for (r in 1:repeats) {
         # Repetition loop START
 
-        perf.results <- NULL
-        important.scores <- NULL
         for (i in 1:seq.length) {
           # N-Bootstrap or k-cv loop START
 
@@ -110,8 +110,8 @@ fit <-
 
           if (classifier == "lr") {
             m <- glm(f, data = training, family = "binomial")
-            important.scores <-
-              rbind(important.scores, Anova(m)$"LR Chisq")
+            importance <-
+              rbind(importance, cbind(repetition = r, Anova(m)$"LR Chisq"))
             prob <- predict(m, testing, type = "response")
           } else if (classifier == "rf") {
             m <- randomForest(x = training[, indep],
@@ -119,8 +119,8 @@ fit <-
                               ntree = classifier.params$rf.ntree)
             prob <-
               predict(m, newdata = testing[, indep], type = 'prob')[, "TRUE"]
-            important.scores <-
-              rbind(important.scores, varImp(m)$Overall)
+            importance <-
+              rbind(importance, cbind(repetition = r, varImp(m)$Overall))
           } else if (classifier == "c5.0") {
             m <- C5.0(
               training[, indep],
@@ -130,8 +130,8 @@ fit <-
             )
             prob <-
               predict(m, newdata = testing, type = "prob")[, "TRUE"]
-            important.scores <-
-              rbind(important.scores, varImp(m)$Overall)
+            importance <-
+              rbind(importance, cbind(repetition = r, varImp(m)$Overall))
           } else if (classifier == "nb") {
             m <- naiveBayes(f, data = training)
             prob <-
@@ -150,37 +150,27 @@ fit <-
                 cbind(genericVarImp, mean(testing[, dep] != predictions))
             }
             colnames(genericVarImp) <- indep
-            important.scores <-
-              rbind(important.scores, genericVarImp)
+            importance <-
+              rbind(importance, cbind(repetition = r, genericVarImp))
           }
 
           # Compute performance
           if (classifier %in% c("rf", "c5.0")) {
             # The dependent variable must be factor for rf and c5.0
-            perf.results <-
-              rbind(perf.results,
-                    performance.calculation(outcome[-unique(indices)], prob, prob.threshold))
+            performance <-
+              rbind(performance,
+                    cbind(repetition = r, performance.calculation(outcome[-unique(indices)], prob, prob.threshold)))
           } else {
-            perf.results <-
-              rbind(perf.results,
-                    performance.calculation(testing[, dep], prob, prob.threshold))
+            performance <-
+              rbind(performance,
+                    cbind(repetition =r, performance.calculation(testing[, dep], prob, prob.threshold)))
           }
 
         } # n-bootstrap or k-cv loop END
-        important.scores <- data.frame(important.scores)
-        colnames(important.scores) <- indep
-        results[[r]] <-
-          list(
-            performance.estimates = data.frame(perf.results),
-            important.scores = important.scores
-          )
       } # Repetition loop END
-
-      names(results) <- paste0('Repetition-', 1:repeats)
-    } else {
-      # no validation - constructing a model with the whole dataset
-      results <- NULL
-    }
+      importance <- data.frame(importance)
+      names(importance) <- c('repetition', indep)
+    } #else no validation - constructing a model with the whole dataset
 
     # Construct full model
     if (classifier == "lr") {
@@ -198,6 +188,7 @@ fit <-
       full.model <- naiveBayes(f, data = data)
     }
 
-    return(list(results = results,
+    return(list(performance = performance,
+                importance = importance,
                 full.model = full.model))
   }
