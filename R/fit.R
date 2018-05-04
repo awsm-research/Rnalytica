@@ -13,7 +13,7 @@
 #' @param validation.params a list of parameters for an input validation techniques (default: list(cv.k = 10, boot.n = 100))
 #' @param prob.threshold a numeric for probability threshold (default: 0.5)
 #' @param repeats a numeric for number of repetitions (default: 1)
-#' @import caret C50 e1071
+#' @import caret C50 e1071 car randomForest
 #' @importFrom stats as.formula glm predict
 #' @keywords fit
 #' @export
@@ -31,7 +31,6 @@ fit <-
            prob.threshold = 0.5,
            repeats = 1) {
     # Init variables
-    results <- list()
     data.nrow <- nrow(data)
     outcome <- NULL
     if (!is.factor(data[, dep])) {
@@ -66,7 +65,7 @@ fit <-
                       returnTrain = TRUE)
       }
       seq.length <- validation.params$cv.k
-    } else if (validation != 'NO') {
+    } else if (validation != 'no') {
       stop('Invalid input validation technique')
     }
 
@@ -111,7 +110,7 @@ fit <-
           if (classifier == "lr") {
             m <- glm(f, data = training, family = "binomial")
             importance <-
-              rbind(importance, cbind(repetition = r, Anova(m)$"LR Chisq"))
+              rbind(importance, cbind(r, i, t(Anova(m)$"LR Chisq")))
             prob <- predict(m, testing, type = "response")
           } else if (classifier == "rf") {
             m <- randomForest(x = training[, indep],
@@ -120,7 +119,7 @@ fit <-
             prob <-
               predict(m, newdata = testing[, indep], type = 'prob')[, "TRUE"]
             importance <-
-              rbind(importance, cbind(repetition = r, varImp(m)$Overall))
+              rbind(importance, cbind(r, i, t(varImp(m)$Overall)))
           } else if (classifier == "c5.0") {
             m <- C5.0(
               training[, indep],
@@ -131,7 +130,7 @@ fit <-
             prob <-
               predict(m, newdata = testing, type = "prob")[, "TRUE"]
             importance <-
-              rbind(importance, cbind(repetition = r, varImp(m)$Overall))
+              rbind(importance, cbind(r, i, t(varImp(m)$Overall)))
           } else if (classifier == "nb") {
             m <- naiveBayes(f, data = training)
             prob <-
@@ -151,7 +150,7 @@ fit <-
             }
             colnames(genericVarImp) <- indep
             importance <-
-              rbind(importance, cbind(repetition = r, genericVarImp))
+              rbind(importance, cbind(r, i, genericVarImp))
           }
 
           # Compute performance
@@ -159,17 +158,17 @@ fit <-
             # The dependent variable must be factor for rf and c5.0
             performance <-
               rbind(performance,
-                    cbind(repetition = r, performance.calculation(outcome[-unique(indices)], prob, prob.threshold)))
+                    cbind(repetition = r, sample = i, t(performance.calculation(outcome[-unique(indices)], prob, prob.threshold))))
           } else {
             performance <-
               rbind(performance,
-                    cbind(repetition =r, performance.calculation(testing[, dep], prob, prob.threshold)))
+                    cbind(repetition =r, sample = i, t(performance.calculation(testing[, dep], prob, prob.threshold))))
           }
 
         } # n-bootstrap or k-cv loop END
       } # Repetition loop END
       importance <- data.frame(importance)
-      names(importance) <- c('repetition', indep)
+      names(importance) <- c('repetition', 'sample', indep)
     } #else no validation - constructing a model with the whole dataset
 
     # Construct full model
