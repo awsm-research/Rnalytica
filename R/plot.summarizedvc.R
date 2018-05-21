@@ -12,9 +12,17 @@ plot.summarizedvc <- function(vc,
                               labels = NULL,
                               ...){
 
-  sim <- melt(vc$sim)
-  correlated.sim <- sim[sim$value >= vc$threshold, ]
-  correlated.metrics <- vc$indep[vc$indep %in% unique(sort(c(as.character(correlated.sim$Var1), as.character(correlated.sim$Var2))))]
+  # Cut from hclust
+  var.clusters <-
+    cutree(vc$hclust, h = (1 -  vc$threshold))
+  indices <- table(var.clusters)
+  correlated.indices <- as.numeric(names(indices)[indices > 1])
+  correlated.metrics <- vc$indep[vc$indep %in% names(var.clusters[var.clusters %in% correlated.indices])]
+
+  # Cut from sim matrix
+  # sim <- melt(vc$sim)
+  # correlated.sim <- sim[sim$value >= vc$threshold & sim$value != 1, ]
+  # correlated.metrics <- vc$indep[vc$indep %in% unique(sort(c(as.character(correlated.sim$Var1), as.character(correlated.sim$Var2))))]
   trans <- vc$trans
   s <- c(
     hoeffding = "30 * Hoeffding D",

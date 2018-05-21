@@ -71,6 +71,10 @@ fit <-
 
     performance <- NULL
     importance <- NULL
+    # Generate model formula
+    f <-
+      as.formula(paste0(dep, " ~ ", paste0(indep, collapse = "+")))
+    
     if (validation != 'no') {
       # boot and cv
       for (r in 1:repeats) {
@@ -88,29 +92,25 @@ fit <-
           # Generate testing dataset
           testing <- data[-unique(indices),]
 
-          # Generate model formula
-          f <-
-            as.formula(paste0(dep, " ~ ", paste0(indep, collapse = "+")))
-
           # Data Preprocessing (default - no)
           if (rebalance == "down") {
             # Downsampling
             training <-
               downSample(x = training[, indep],
-                         y = training[, dep],
+                         y = factor(training[, dep]),
                          yname = dep)
           } else if (rebalance == "up") {
             # Upsampling
             training <-
               upSample(x = training[, indep],
-                       y = training[, dep],
+                       y = factor(training[, dep]),
                        yname = dep)
           } # else no
 
           if (classifier == "lr") {
             m <- glm(f, data = training, family = "binomial")
             importance <-
-              rbind(importance, cbind(r, i, t(Anova(m)$"LR Chisq")))
+              rbind(importance, c(repetition = r, Anova(m)$"LR Chisq"))
             prob <- predict(m, testing, type = "response")
           } else if (classifier == "rf") {
             m <- randomForest(x = training[, indep],
@@ -119,7 +119,7 @@ fit <-
             prob <-
               predict(m, newdata = testing[, indep], type = 'prob')[, "TRUE"]
             importance <-
-              rbind(importance, cbind(r, i, t(varImp(m)$Overall)))
+              rbind(importance, c(repetition = r, varImp(m)$Overall))
           } else if (classifier == "c5.0") {
             m <- C5.0(
               training[, indep],
@@ -130,7 +130,7 @@ fit <-
             prob <-
               predict(m, newdata = testing, type = "prob")[, "TRUE"]
             importance <-
-              rbind(importance, cbind(r, i, t(varImp(m)$Overall)))
+              rbind(importance, c(repetition = r, varImp(m)$Overall))
           } else if (classifier == "nb") {
             m <- naiveBayes(f, data = training)
             prob <-
@@ -150,7 +150,7 @@ fit <-
             }
             colnames(genericVarImp) <- indep
             importance <-
-              rbind(importance, cbind(r, i, genericVarImp))
+              rbind(importance, c(repetition = r, genericVarImp))
           }
 
           # Compute performance
@@ -158,15 +158,16 @@ fit <-
             # The dependent variable must be factor for rf and c5.0
             performance <-
               rbind(performance,
-                    cbind(repetition = r, sample = i, t(performance.calculation(outcome[-unique(indices)], prob, prob.threshold))))
+                    c(repetition = r, performance.calculation(outcome[-unique(indices)], prob, prob.threshold)))
           } else {
             performance <-
               rbind(performance,
-                    cbind(repetition =r, sample = i, t(performance.calculation(testing[, dep], prob, prob.threshold))))
+                    c(repetition =r, performance.calculation(testing[, dep], prob, prob.threshold)))
           }
 
         } # n-bootstrap or k-cv loop END
       } # Repetition loop END
+      performance <- data.frame(performance)
       importance <- data.frame(importance)
       names(importance) <- c('repetition', 'sample', indep)
     } #else no validation - constructing a model with the whole dataset
