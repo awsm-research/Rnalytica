@@ -1,8 +1,8 @@
 Package: Rnalytica
-Title: What the Package Does (one line, title case)
-Version: 0.0.0.9000
+Title: Rnalytica
+Version: 0.1
 Authors@R: person("First", "Last", email = "first.last@example.com", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
+Description: An R package of the Miscellaneous Functions for Data Analytics Research.
 Depends: 
 	C50,
 	Hmisc,
@@ -14,7 +14,7 @@ Depends:
 	randomForest,
 	reshape2,
 	foreign,
-	ScottKnottESD
+	rms
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true

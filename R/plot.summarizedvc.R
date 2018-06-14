@@ -13,16 +13,16 @@ plot.summarizedvc <- function(vc,
                               ...){
 
   # Cut from hclust
-  var.clusters <-
-    cutree(vc$hclust, h = (1 -  vc$threshold))
-  indices <- table(var.clusters)
-  correlated.indices <- as.numeric(names(indices)[indices > 1])
-  correlated.metrics <- vc$indep[vc$indep %in% names(var.clusters[var.clusters %in% correlated.indices])]
+  # var.clusters <-
+  #   cutree(vc$hclust, h = (1 -  vc$threshold))
+  # indices <- table(var.clusters)
+  # correlated.indices <- as.numeric(names(indices)[indices > 1])
+  # correlated.metrics <- vc$metrics[vc$metrics %in% names(var.clusters[var.clusters %in% correlated.indices])]
 
   # Cut from sim matrix
-  # sim <- melt(vc$sim)
-  # correlated.sim <- sim[sim$value >= vc$threshold & sim$value != 1, ]
-  # correlated.metrics <- vc$indep[vc$indep %in% unique(sort(c(as.character(correlated.sim$Var1), as.character(correlated.sim$Var2))))]
+  sim <- melt(vc$sim)
+  correlated.sim <- sim[sim$value >= vc$threshold & sim$value != 1, ]
+  correlated.metrics <- vc$metrics[vc$metrics %in% unique(sort(c(as.character(correlated.sim$Var1), as.character(correlated.sim$Var2))))]
   trans <- vc$trans
   s <- c(
     hoeffding = "30 * Hoeffding D",
@@ -79,7 +79,7 @@ plot.summarizedvc <- function(vc,
 
   # max pixels need to plot metrics
   max.length <-
-    max(unlist(lapply(vc$indep, function(x)
+    max(unlist(lapply(vc$metrics, function(x)
       strwidth(x, font = 12, units = 'in'))))
   tick.margin <- (5 + (4.544286 * (max.length - 0.574)))
   par(mar = c(5, 2.5, 5, tick.margin))
