@@ -3,12 +3,30 @@
 An R package of the Miscellaneous Functions for Data Analytics Research
 
 ### Install
-with the `devtools ` R package:
+To prepare execution enrionment, please run the command below in terminal.
+
+```
+apt-get install r-base r-base-dev libcurl4-gnutls-dev libcurl4-openssl-dev libssl-dev
+```
+
+Then, install `Rnalytica` with the `devtools` R package:
 ```r
+install.packages('devtools')
 devtools::install_github('software-analytics/Rnalytica')
 ```
 
 ### Descriptive Statistics of 101 defect datasets
+The package provides a collection of the 101 publicly-available defect datasets that are collected from 5 different corpora, i.e., 76 datasets from the Tera-PROMISE Repository [1], 12 clean NASA datasets as provided by Shepperd et al. [2], 5 datasets as provided by Kim et al. [3, 4], 5 datasets as provided by D'Ambros et al. [5, 6], and 3 datasets as provided by Zimmermann et al. [7].
+
+[1] T. Menzies, B. Caglayan, E. Kocaguneli, J. Krall, F. Peters, and B. Turhan, “The Promise Repository of Empirical Software Engineering Data,” 2012.
+[2] M. Shepperd, Q. Song, Z. Sun, and C. Mair, “Data Quality: Some Comments on the NASA Software Defect Datasets,” Transactions on Software Engineering (TSE), vol. 39, no. 9, pp. 1208–1215, 2013.
+[3]S. Kim, H. Zhang, R. Wu, and L. Gong, “Dealing with Noise in Defect Prediction,” in Proceedings of the International Conference on Software Engineering (ICSE), 2011, pp. 481–490.
+[4] R. Wu, H. Zhang, S. Kim, and S.-C. Cheung, “Relink: Recovering Links between Bugs and Changes,” in Proceedings of the European Software Engineering Conference and the Symposium on the Foundations of Software Engineering (ESEC/FSE), 2011, pp. 15–25.
+[5] M. D’Ambros, M. Lanza, and R. Robbes, “An Extensive Comparison of Bug Prediction Approaches,” in Proceedings of the International Conference on Mining Software Repositories (MSR), 2010, pp. 31–41.
+[6] M. D’Ambros, M. Lanza, and R. Robbes, “Evaluating Defect Prediction Approaches: A Benchmark and an Extensive Comparison,” Empirical Software Engineering (EMSE), vol. 17, no. 4-5, pp. 531–577, 2012.
+[7] T. Zimmermann, R. Premraj, and A. Zeller, “Predicting Defects for Eclipse,” in Proceedings of the International Workshop on Predictor Models in Software Engineering (PROMISE), 2007, pp. 9–19.
+
+We provide a descriptive statistics below.
 
 |          System |  Corpus | DefectiveRatio | #Modules | #DefectiveModules | #Predictors |         EPV |
 |:---------------:|:-------:|:--------------:|:-------:|:---------:|:----------:|:-----------:|
