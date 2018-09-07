@@ -74,6 +74,7 @@ fit <-
     
     performance <- NULL
     importance <- NULL
+    execution.time <- NULL
     # Generate model formula
     f <-
       as.formula(paste0(dep, " ~ ", paste0(indep, collapse = "+")))
@@ -206,16 +207,20 @@ fit <-
           #   }
           # }
           
+          t.start <- Sys.time()
           fit.object <- single.fit(training,
                                    testing,
                                    dep,
                                    indep,
                                    classifier,
                                    classifier.params,
-                                   params.tuning)
+                                   params.tuning,
+                                   prob.threshold)
+          t.end <- Sys.time()
           
           importance <- rbind(importance, fit.object$importance)
           performance <- rbind(performance, fit.object$performance)
+          execution.time <- rbind(execution.time, t.end-t.start)
           
         } # n-bootstrap or k-cv loop END
       } # Repetition loop END
@@ -235,9 +240,13 @@ fit <-
                          rules = classifier.params$c5.0.rules)
     } else if (classifier == "nb") {
       full.model <- naiveBayes(f, data = data)
+    } else if (classifier == 'svm'){
+      data[, dep] <- factor(data[, dep])
+      full.model <- svm(f, data=data, probability = TRUE)
     }
     
     return(list(performance = performance,
                 importance = importance,
+                execution.time = execution.time,
                 full.model = full.model))
   }

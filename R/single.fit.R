@@ -23,7 +23,8 @@ single.fit <-
            classifier.params = list(rf.ntree = 100,
                                     c5.0.trials = 40,
                                     c5.0.rules = TRUE),
-           params.tuning = F) {
+           params.tuning = F,
+           prob.threshold) {
     importance <- NULL
     performance <- NULL
     training.data[, dep] <- factor(training.data[, dep])
@@ -35,7 +36,7 @@ single.fit <-
     if (classifier == "lr") {
       m <- glm(f, data = training.data, family = "binomial")
       importance <-
-        rbind(importance, c(repetition = r, Anova(m)$"LR Chisq"))
+        rbind(importance, c(Anova(m)$"LR Chisq"))
       prob <- predict(m, testing.data, type = "response")
     } else if (classifier == "rf") {
       # Traditional randomForest
@@ -72,7 +73,7 @@ single.fit <-
         })
       names(prob) <- row.names(testing.data)
       importance <-
-        rbind(importance, c(repetition = r, importance(m)))
+        rbind(importance, c(importance(m)))
       
     } else if (classifier == "c5.0") {
       m <- C5.0(
@@ -84,7 +85,7 @@ single.fit <-
       prob <-
         predict(m, newdata = testing.data, type = "prob")[, "TRUE"]
       importance <-
-        rbind(importance, c(repetition = r, varImp(m)$Overall))
+        rbind(importance, c(varImp(m)$Overall))
     } else if (classifier == "nb") {
       m <- naiveBayes(f, data = training.data)
       prob <-
@@ -104,7 +105,7 @@ single.fit <-
       }
       colnames(genericVarImp) <- indep
       importance <-
-        rbind(importance, c(repetition = r, genericVarImp))
+        rbind(importance, c(genericVarImp))
     }  else if (classifier == "svm") {
       m <- svm(f, data=training.data, probability = TRUE)
       prob <- predict(m, testing.data, probability = TRUE)
@@ -112,7 +113,7 @@ single.fit <-
       names(prob) <- row.names(testing.data)
       # TODO
       importance <-
-        rbind(importance, c(repetition = r, rep(0, length(indep))))
+        rbind(importance, c(rep(0, length(indep))))
     }
     
     # Compute performance
@@ -127,20 +128,18 @@ single.fit <-
       performance <-
         rbind(performance,
               c(
-                repetition = r,
                 performance.calculation(factor(testing.data[, dep]), prob, prob.threshold)
               ))
     } else {
       performance <-
         rbind(performance,
               c(
-                repetition = r,
                 performance.calculation(testing.data[, dep], prob, prob.threshold)
               ))
     }
     
     importance <- data.frame(importance)
-    names(importance) <- c('repetition', indep)
+    names(importance) <- indep
     return(list(
       performance = data.frame(performance),
       importance = importance,

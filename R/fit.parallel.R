@@ -35,6 +35,7 @@ fit.parallel <-
            repeats = 1,
            nCore = 2) {
     # Init variables
+    library(doMC)
     registerDoMC(nCore)
     data.nrow <- nrow(data)
     outcome <- NULL
@@ -217,7 +218,8 @@ fit.parallel <-
                                    indep,
                                    classifier,
                                    classifier.params,
-                                   params.tuning)
+                                   params.tuning,
+                                   prob.threshold)
           t.end <- Sys.time()
           return(list(performance = fit.object$performance, importance = fit.object$importance, execution.time = t.end - t.start))
         } # n-bootstrap or k-cv loop END
@@ -242,6 +244,9 @@ fit.parallel <-
                          rules = classifier.params$c5.0.rules)
     } else if (classifier == "nb") {
       full.model <- naiveBayes(f, data = data)
+    } else if (classifier == 'svm'){
+      data[, dep] <- factor(data[, dep])
+      full.model <- svm(f, data=data, probability = TRUE)
     }
     
     return(list(performance = performance,

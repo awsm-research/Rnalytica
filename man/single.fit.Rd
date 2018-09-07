@@ -6,7 +6,7 @@
 \usage{
 single.fit(training.data, testing.data, dep, indep, classifier = "lr",
   classifier.params = list(rf.ntree = 100, c5.0.trials = 40, c5.0.rules =
-  TRUE), params.tuning = F)
+  TRUE), params.tuning = F, prob.threshold)
 }
 \arguments{
 \item{training.data}{a dataframe for training data}
