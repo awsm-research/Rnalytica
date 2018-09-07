@@ -1,4 +1,5 @@
 
+
 #' A single fit function
 #'
 #'
@@ -23,7 +24,6 @@ single.fit <-
                                     c5.0.trials = 40,
                                     c5.0.rules = TRUE),
            params.tuning = F) {
-    
     importance <- NULL
     performance <- NULL
     # Generate model formula
@@ -50,12 +50,29 @@ single.fit <-
       
       # Faster randomForest (ranger)
       set.seed(1)
-      m <- ranger(f, data = training.data, num.trees = classifier.params$rf.ntree, classification = TRUE, importance = "permutation")
-      prob <- predict(m, data = testing.data, type='response', predict.all = T)
-      prob <- apply(prob$predictions, 1, function(x) { o <- table(x); o <- o/sum(o); return(ifelse(is.na(o['2']), 0, o['2']))})
+      m <-
+        ranger(
+          f,
+          data = training.data,
+          num.trees = classifier.params$rf.ntree,
+          classification = TRUE,
+          importance = "permutation"
+        )
+      prob <-
+        predict(m,
+                data = testing.data,
+                type = 'response',
+                predict.all = T)
+      prob <-
+        apply(prob$predictions, 1, function(x) {
+          o <-
+            table(x)
+          o <- o / sum(o)
+          return(ifelse(is.na(o['2']), 0, o['2']))
+        })
       names(prob) <- row.names(testing.data)
       importance <-
-          rbind(importance, c(repetition = r, importance(m)))
+        rbind(importance, c(repetition = r, importance(m)))
       
     } else if (classifier == "c5.0") {
       m <- C5.0(
@@ -101,16 +118,24 @@ single.fit <-
       # }
       performance <-
         rbind(performance,
-              c(repetition = r, performance.calculation(factor(testing.data[, dep]), prob, prob.threshold)))
+              c(
+                repetition = r,
+                performance.calculation(factor(testing.data[, dep]), prob, prob.threshold)
+              ))
     } else {
       performance <-
         rbind(performance,
-              c(repetition =r, performance.calculation(testing.data[, dep], prob, prob.threshold)))
+              c(
+                repetition = r,
+                performance.calculation(testing.data[, dep], prob, prob.threshold)
+              ))
     }
     
     importance <- data.frame(importance)
     names(importance) <- c('repetition', indep)
-    return(list(performance = data.frame(performance),
-                importance = importance,
-                model = m))
+    return(list(
+      performance = data.frame(performance),
+      importance = importance,
+      model = m
+    ))
   }
