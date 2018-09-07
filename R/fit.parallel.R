@@ -1,5 +1,5 @@
 
-#' Universal fit function
+#' Universal fit function (Parallel implementation)
 #'
 #'
 #' @param data a dataframe for input data
@@ -14,11 +14,11 @@
 #' @param validation.params a list of parameters for an input validation techniques (default: list(cv.k = 10, boot.n = 100))
 #' @param prob.threshold a numeric for probability threshold (default: 0.5)
 #' @param repeats a numeric for number of repetitions (default: 1)
-#' @import caret C50 e1071 car randomForest DMwR
+#' @import caret C50 e1071 car randomForest DMwR doMC
 #' @importFrom stats as.formula glm predict
 #' @keywords fit
 #' @export
-fit <-
+fit.parallel <-
   function(data,
            dep,
            indep,
@@ -32,8 +32,10 @@ fit <-
            validation = "boot",
            validation.params = list(cv.k = 10, boot.n = 100),
            prob.threshold = 0.5,
-           repeats = 1) {
+           repeats = 1,
+           nCore = 2) {
     # Init variables
+    registerDoMC(nCore)
     data.nrow <- nrow(data)
     outcome <- NULL
     if (!is.factor(data[, dep])) {
@@ -74,6 +76,7 @@ fit <-
     
     performance <- NULL
     importance <- NULL
+    execution.time <- NULL
     # Generate model formula
     f <-
       as.formula(paste0(dep, " ~ ", paste0(indep, collapse = "+")))
@@ -83,7 +86,8 @@ fit <-
       for (r in 1:repeats) {
         # Repetition loop START
         
-        for (i in 1:seq.length) {
+        results <- foreach(i = 1:seq.length) %dopar% {
+        # for (i in 1:seq.length) {
           # N-Bootstrap or k-cv loop START
           
           # Get training indices at r-th repetition and i-th sample
@@ -103,12 +107,12 @@ fit <-
           if(normalize == 'standardize'){
             # normalize training
             tmp <- data.frame(sapply(seq_along(indep),
-                   function(index, x, x.mean, x.sd){
-                     return((x[, index] - x.mean[index])/x.sd[index])
-                   },
-                   x = training[, indep],
-                   x.mean = train.mean.values,
-                   x.sd = train.sd.values))
+                                     function(index, x, x.mean, x.sd){
+                                       return((x[, index] - x.mean[index])/x.sd[index])
+                                     },
+                                     x = training[, indep],
+                                     x.mean = train.mean.values,
+                                     x.sd = train.sd.values))
             tmp <- cbind(tmp, training[, dep])
             names(tmp) <- c(indep, dep)
             training <- tmp
@@ -206,6 +210,7 @@ fit <-
           #   }
           # }
           
+          t.start <- Sys.time()
           fit.object <- single.fit(training,
                                    testing,
                                    dep,
@@ -213,11 +218,13 @@ fit <-
                                    classifier,
                                    classifier.params,
                                    params.tuning)
-          
-          importance <- rbind(importance, fit.object$importance)
-          performance <- rbind(performance, fit.object$performance)
-          
+          t.end <- Sys.time()
+          return(list(performance = fit.object$performance, importance = fit.object$importance, execution.time = t.end - t.start))
         } # n-bootstrap or k-cv loop END
+        importance <- rbind(importance, do.call(rbind, lapply(results, function(x) return(x$importance))))
+        performance <- rbind(performance, do.call(rbind, lapply(results, function(x) return(x$performance))))
+        execution.time <- rbind(execution.time, do.call(rbind, lapply(results, function(x) return(x$execution.time))))
+        
       } # Repetition loop END
     } #else no validation - constructing a model with the whole dataset
     
@@ -239,5 +246,6 @@ fit <-
     
     return(list(performance = performance,
                 importance = importance,
+                execution.time = execution.time,
                 full.model = full.model))
   }
