@@ -13,7 +13,7 @@
 #' @importFrom stats as.formula glm predict
 #' @keywords fit
 #' @export
-fit <-
+single.fit <-
   function(training.data,
            testing.data,
            dep,
@@ -24,50 +24,66 @@ fit <-
                                     c5.0.rules = TRUE),
            params.tuning = F) {
     
+    importance <- NULL
+    performance <- NULL
     # Generate model formula
     f <-
       as.formula(paste0(dep, " ~ ", paste0(indep, collapse = "+")))
     
     if (classifier == "lr") {
-      m <- glm(f, data = training, family = "binomial")
+      m <- glm(f, data = training.data, family = "binomial")
       importance <-
         rbind(importance, c(repetition = r, Anova(m)$"LR Chisq"))
-      prob <- predict(m, testing, type = "response")
+      prob <- predict(m, testing.data, type = "response")
     } else if (classifier == "rf") {
-      m <- randomForest(x = training[, indep],
-                        y = outcome[indices],
-                        ntree = classifier.params$rf.ntree)
-      prob <-
-        predict(m, newdata = testing[, indep], type = 'prob')[, "TRUE"]
+      training.data[, dep] <- factor(training.data[, dep])
+      testing.data[, dep] <- factor(testing.data[, dep])
+      # Traditional randomForest
+      # set.seed(1)
+      # m <- randomForest(x = training.data[, indep],
+      #                   y = training.data[, dep],
+      #                   ntree = classifier.params$rf.ntree)
+      # prob <-
+      #   predict(m, newdata = testing.data[, indep], type = 'prob')[, "TRUE"]
+      # importance <-
+      #   rbind(importance, c(repetition = r, varImp(m)$Overall))
+      
+      # Faster randomForest (ranger)
+      set.seed(1)
+      m <- ranger(f, data = training.data, num.trees = classifier.params$rf.ntree, classification = TRUE, importance = "permutation")
+      prob <- predict(m, data = testing.data, type='response', predict.all = T)
+      prob <- apply(prob$predictions, 1, function(x) { o <- table(x); o <- o/sum(o); return(ifelse(is.na(o['2']), 0, o['2']))})
+      names(prob) <- row.names(testing.data)
       importance <-
-        rbind(importance, c(repetition = r, varImp(m)$Overall))
+          rbind(importance, c(repetition = r, importance(m)))
+      
     } else if (classifier == "c5.0") {
       m <- C5.0(
-        training[, indep],
-        outcome[indices],
+        training.data[, indep],
+        factor(training.data[, indep]),
         trials = classifier.params$c5.0.trials,
         rules = classifier.params$c5.0.rules
       )
       prob <-
-        predict(m, newdata = testing, type = "prob")[, "TRUE"]
+        predict(m, newdata = testing.data, type = "prob")[, "TRUE"]
       importance <-
         rbind(importance, c(repetition = r, varImp(m)$Overall))
     } else if (classifier == "nb") {
-      m <- naiveBayes(f, data = training)
+      m <- naiveBayes(f, data = training.data)
       prob <-
-        predict(m, newdata = testing, type = "raw")[, "TRUE"]
+        predict(m, newdata = testing.data, type = "raw")[, "TRUE"]
       
       # Permutation Importance for Naive Bayes
       genericVarImp <- c()
       for (predictorName in indep) {
-        shuffledData <- testing[, indep]
+        shuffledData <- testing.data[, indep]
         shuffledData[, predictorName] <-
           sample(shuffledData[, predictorName], length(shuffledData[, predictorName]))
         predictions <-
           predict(m, newdata = shuffledData, type = "raw")[, "TRUE"]
         predictions <- ifelse(predictions > 0.5, TRUE, FALSE)
         genericVarImp <-
-          cbind(genericVarImp, mean(testing[, dep] != predictions))
+          cbind(genericVarImp, mean(testing.data[, dep] != predictions))
       }
       colnames(genericVarImp) <- indep
       importance <-
@@ -77,17 +93,24 @@ fit <-
     # Compute performance
     if (classifier %in% c("rf", "c5.0")) {
       # The dependent variable must be factor for rf and c5.0
+      # outcome <- NULL
+      # if (!is.factor(testing.data[, dep])) {
+      #   outcome <- factor(testing.data[, dep])
+      # } else {
+      #   outcome <- testing.data[, dep]
+      # }
       performance <-
         rbind(performance,
-              c(repetition = r, performance.calculation(outcome[-unique(indices)], prob, prob.threshold)))
+              c(repetition = r, performance.calculation(factor(testing.data[, dep]), prob, prob.threshold)))
     } else {
       performance <-
         rbind(performance,
-              c(repetition =r, performance.calculation(testing[, dep], prob, prob.threshold)))
+              c(repetition =r, performance.calculation(testing.data[, dep], prob, prob.threshold)))
     }
     
-    
-    return(list(performance = performance,
+    importance <- data.frame(importance)
+    names(importance) <- c('repetition', indep)
+    return(list(performance = data.frame(performance),
                 importance = importance,
                 model = m))
   }
