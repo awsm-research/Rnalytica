@@ -26,6 +26,8 @@ single.fit <-
            params.tuning = F) {
     importance <- NULL
     performance <- NULL
+    training.data[, dep] <- factor(training.data[, dep])
+    testing.data[, dep] <- factor(testing.data[, dep])
     # Generate model formula
     f <-
       as.formula(paste0(dep, " ~ ", paste0(indep, collapse = "+")))
@@ -36,8 +38,6 @@ single.fit <-
         rbind(importance, c(repetition = r, Anova(m)$"LR Chisq"))
       prob <- predict(m, testing.data, type = "response")
     } else if (classifier == "rf") {
-      training.data[, dep] <- factor(training.data[, dep])
-      testing.data[, dep] <- factor(testing.data[, dep])
       # Traditional randomForest
       # set.seed(1)
       # m <- randomForest(x = training.data[, indep],
@@ -77,7 +77,7 @@ single.fit <-
     } else if (classifier == "c5.0") {
       m <- C5.0(
         training.data[, indep],
-        factor(training.data[, indep]),
+        training.data[, dep],
         trials = classifier.params$c5.0.trials,
         rules = classifier.params$c5.0.rules
       )
@@ -105,6 +105,14 @@ single.fit <-
       colnames(genericVarImp) <- indep
       importance <-
         rbind(importance, c(repetition = r, genericVarImp))
+    }  else if (classifier == "svm") {
+      m <- svm(f, data=training.data, probability = TRUE)
+      prob <- predict(m, testing.data, probability = TRUE)
+      prob <- attr(prob, "probabilities")[, 'TRUE']
+      names(prob) <- row.names(testing.data)
+      # TODO
+      importance <-
+        rbind(importance, c(repetition = r, rep(0, length(indep))))
     }
     
     # Compute performance

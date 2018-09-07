@@ -8,12 +8,13 @@
 #' @param classifier a character for classifier techniques, i.e., lr, rf, c5.0, and nb (default: "lr")
 #' @param classifier.params a list of parameters for an input classifier technique (default: list(rf.ntree = 100, c5.0.trials = 40, c5.0.rules = TRUE)
 #' @param params.tuning a boolean indicates whether to perform parameters tuning
+#' @param normalize a character for normalization techniques, i.e., log, scale, center, standardize, and no for non-normalization#' 
 #' @param rebalance a character for a choice of data sampling techniques, i.e., up for upsampling, down for downsampling, and no for no-sampling (default: "NO")
 #' @param validation a character for a choice of validation techniques, i.e., boot for bootstrap validation technique, cv for cross-validation technique, and no for constructing a model with the whole dataset without model validation (default: "boot")
 #' @param validation.params a list of parameters for an input validation techniques (default: list(cv.k = 10, boot.n = 100))
 #' @param prob.threshold a numeric for probability threshold (default: 0.5)
 #' @param repeats a numeric for number of repetitions (default: 1)
-#' @import caret C50 e1071 car randomForest
+#' @import caret C50 e1071 car randomForest DMwR
 #' @importFrom stats as.formula glm predict
 #' @keywords fit
 #' @export
@@ -26,6 +27,7 @@ fit <-
                                     c5.0.trials = 40,
                                     c5.0.rules = TRUE),
            params.tuning = FALSE,
+           normalize = "no",
            rebalance = "no",
            validation = "boot",
            validation.params = list(cv.k = 10, boot.n = 100),
@@ -93,7 +95,86 @@ fit <-
           # Generate testing dataset
           testing <- data[-unique(indices),]
           
-          # Data Preprocessing (default - no)
+          ## Data Preprocessing 
+          
+          # Data normalization (default - no)
+          train.mean.values <- apply(training[, indep], 2, mean)
+          train.sd.values <- apply(training[, indep], 2, sd)
+          if(normalize == 'standardize'){
+            # normalize training
+            tmp <- data.frame(sapply(seq_along(indep),
+                   function(index, x, x.mean, x.sd){
+                     return((x[, index] - x.mean[index])/x.sd[index])
+                   },
+                   x = training[, indep],
+                   x.mean = train.mean.values,
+                   x.sd = train.sd.values))
+            tmp <- cbind(tmp, training[, dep])
+            names(tmp) <- c(indep, dep)
+            training <- tmp
+            
+            # normalize testing with mean and sd of training (https://stats.stackexchange.com/questions/174823/how-to-apply-standardization-normalization-to-train-and-testset-if-prediction-i)
+            tmp <- data.frame(sapply(seq_along(indep),
+                                     function(index, x, x.mean, x.sd){
+                                       return((x[, index] - x.mean[index])/x.sd[index])
+                                     },
+                                     x = testing[, indep],
+                                     x.mean = train.mean.values,
+                                     x.sd = train.sd.values))
+            tmp <- cbind(tmp, testing[, dep])
+            names(tmp) <- c(indep, dep)
+            testing <- tmp
+          } else if(normalize == 'scale'){
+            # normalize training
+            tmp <- data.frame(sapply(seq_along(indep),
+                                     function(index, x, x.sd){
+                                       return((x[, index])/x.sd[index])
+                                     },
+                                     x = training[, indep],
+                                     x.sd = train.sd.values))
+            tmp <- cbind(tmp, training[, dep])
+            names(tmp) <- c(indep, dep)
+            training <- tmp
+            
+            # normalize testing with mean and sd of training (https://stats.stackexchange.com/questions/174823/how-to-apply-standardization-normalization-to-train-and-testset-if-prediction-i)
+            tmp <- data.frame(sapply(seq_along(indep),
+                                     function(index, x, x.sd){
+                                       return((x[, index])/x.sd[index])
+                                     },
+                                     x = testing[, indep],
+                                     x.sd = train.sd.values))
+            tmp <- cbind(tmp, testing[, dep])
+            names(tmp) <- c(indep, dep)
+            testing <- tmp
+          } else if(normalize == 'center'){
+            # normalize training
+            tmp <- data.frame(sapply(seq_along(indep),
+                                     function(index, x, x.mean){
+                                       return((x[, index] - x.mean[index]))
+                                     },
+                                     x = training[, indep],
+                                     x.mean = train.mean.values))
+            tmp <- cbind(tmp, training[, dep])
+            names(tmp) <- c(indep, dep)
+            training <- tmp
+            
+            # normalize testing with mean and sd of training (https://stats.stackexchange.com/questions/174823/how-to-apply-standardization-normalization-to-train-and-testset-if-prediction-i)
+            tmp <- data.frame(sapply(seq_along(indep),
+                                     function(index, x, x.mean){
+                                       return((x[, index] - x.mean[index]))
+                                     },
+                                     x = testing[, indep],
+                                     x.mean = train.mean.values))
+            tmp <- cbind(tmp, testing[, dep])
+            names(tmp) <- c(indep, dep)
+            testing <- tmp
+          } else if(normalize == 'log'){
+            # normalize training
+            training[, indep] <- log1p(training[, indep])
+            testing[, indep] <- log1p(testing[, indep])
+          } # else no
+          
+          # Data rebalance (default - no)
           if (rebalance == "down") {
             # Downsampling
             training <-
@@ -106,7 +187,12 @@ fit <-
               upSample(x = training[, indep],
                        y = factor(training[, dep]),
                        yname = dep)
+          } else if (rebalance == 'smote') {
+            # smote
+            training <- SMOTE(f, data = training)
           } # else no
+          
+          
           
           fit.object <- single.fit(training,
                                    testing,
