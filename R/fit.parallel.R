@@ -109,6 +109,8 @@ fit.parallel <-
             # normalize training
             tmp <- data.frame(sapply(seq_along(indep),
                                      function(index, x, x.mean, x.sd){
+                                       if(x.sd[index]==0)
+                                         return(x[, index])
                                        return((x[, index] - x.mean[index])/x.sd[index])
                                      },
                                      x = training[, indep],
@@ -121,6 +123,8 @@ fit.parallel <-
             # normalize testing with mean and sd of training (https://stats.stackexchange.com/questions/174823/how-to-apply-standardization-normalization-to-train-and-testset-if-prediction-i)
             tmp <- data.frame(sapply(seq_along(indep),
                                      function(index, x, x.mean, x.sd){
+                                       if(x.sd[index]==0)
+                                         return(x[, index])
                                        return((x[, index] - x.mean[index])/x.sd[index])
                                      },
                                      x = testing[, indep],
@@ -133,6 +137,8 @@ fit.parallel <-
             # normalize training
             tmp <- data.frame(sapply(seq_along(indep),
                                      function(index, x, x.sd){
+                                       if(x.sd[index]==0)
+                                         return(x[, index])
                                        return((x[, index])/x.sd[index])
                                      },
                                      x = training[, indep],
@@ -144,6 +150,8 @@ fit.parallel <-
             # normalize testing with mean and sd of training (https://stats.stackexchange.com/questions/174823/how-to-apply-standardization-normalization-to-train-and-testset-if-prediction-i)
             tmp <- data.frame(sapply(seq_along(indep),
                                      function(index, x, x.sd){
+                                       if(x.sd[index]==0)
+                                         return(x[, index])
                                        return((x[, index])/x.sd[index])
                                      },
                                      x = testing[, indep],
