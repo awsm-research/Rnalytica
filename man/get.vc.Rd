@@ -4,8 +4,7 @@
 \alias{get.vc}
 \title{Get VarClus based on the absolute Spearman correlation coefficients between metrics}
 \usage{
-get.vc(dataset, metrics, similarity = "spearman",
-  varclus.threshold = 0.7)
+get.vc(dataset, metrics, similarity = "spearman", varclus.threshold = 0.7)
 }
 \arguments{
 \item{dataset}{a data frame for data}

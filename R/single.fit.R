@@ -10,7 +10,7 @@
 #' @param classifier a character for classifier techniques, i.e., lr, rf, c5.0, and nb (default: "lr")
 #' @param classifier.params a list of parameters for an input classifier technique (default: list(rf.ntree = 100, c5.0.trials = 40, c5.0.rules = TRUE)
 #' @param params.tuning a boolean indicates whether to perform parameters tuning
-#' @import caret C50 e1071 car randomForest
+#' @import caret C50 e1071 car ranger
 #' @importFrom stats as.formula glm predict
 #' @keywords fit
 #' @export
@@ -39,15 +39,6 @@ single.fit <-
         rbind(importance, c(Anova(m)$"LR Chisq"))
       prob <- predict(m, testing.data, type = "response")
     } else if (classifier == "rf") {
-      # Traditional randomForest
-      # set.seed(1)
-      # m <- randomForest(x = training.data[, indep],
-      #                   y = training.data[, dep],
-      #                   ntree = classifier.params$rf.ntree)
-      # prob <-
-      #   predict(m, newdata = testing.data[, indep], type = 'prob')[, "TRUE"]
-      # importance <-
-      #   rbind(importance, c(repetition = r, varImp(m)$Overall))
       
       # Faster randomForest (ranger)
       set.seed(1)
@@ -73,7 +64,7 @@ single.fit <-
         })
       names(prob) <- row.names(testing.data)
       importance <-
-        rbind(importance, c(importance(m)))
+        rbind(importance, c(ranger::importance(m)))
       
     } else if (classifier == "c5.0") {
       m <- C5.0(

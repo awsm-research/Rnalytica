@@ -11,11 +11,12 @@ Depends:
 	dendextend,
 	e1071,
 	pROC,
-	randomForest,
 	reshape2,
 	foreign,
 	rms,
-	DMwR
+	DMwR,
+	doMC,
+	ranger
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true

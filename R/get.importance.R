@@ -6,7 +6,7 @@
 #'
 #' @param model a logistic regression or random forest model
 #' @param normalized a logical to indicate whether to normalize importance scores
-#' @import car randomForest
+#' @import car ranger
 #' @importFrom stats anova
 #' @keywords interpretation
 #' @export
@@ -72,36 +72,14 @@ get.importance <- function(model, normalized = F) {
     )
   } else if (model.technique == 'randomForest') {
     # Random forest
-    indep <- names(model$forest$xlevels)
-    gini <- as.data.frame(t(importance(model, type = 2)[, 1]))
-    gini[is.na(gini)] <- 0
-
-    perm.raw <-
-      as.data.frame(t(importance(
-        model, type = 1, scale = F
-      )[, 1]))
-    perm.raw[is.na(perm.raw)] <- 0
-
-    perm.scaled <-
-      as.data.frame(t(importance(
-        model, type = 1, scale = T
-      )[, 1]))
-    perm.scaled[is.na(perm.scaled)] <- 0
-
+    importance <- ranger::importance(model)
 
     # Normalize
     if (normalized) {
-      gini <-
-        gini / sum(gini) * 100
-      perm.raw <-
-        perm.raw / sum(perm.raw) * 100
-      perm.scaled <-
-        perm.scaled / sum(perm.scaled) * 100
+      importance <- importance/sum(importance)*100
     }
     return(list(
-      Gini = gini,
-      Permutation.Raw = perm.raw,
-      Permutation.Scaled = perm.scaled
+      importance = importance
     ))
   } else {
     stop('Input model must be Logistic Regression or Random Forest')

@@ -14,7 +14,7 @@
 #' @param validation.params a list of parameters for an input validation techniques (default: list(cv.k = 10, boot.n = 100))
 #' @param prob.threshold a numeric for probability threshold (default: 0.5)
 #' @param repeats a numeric for number of repetitions (default: 1)
-#' @import caret C50 e1071 car randomForest DMwR
+#' @import caret C50 e1071 car ranger DMwR
 #' @importFrom stats as.formula glm predict
 #' @keywords fit
 #' @export
@@ -38,6 +38,7 @@ fit <-
     outcome <- NULL
     if (!is.factor(data[, dep])) {
       outcome <- factor(data[, dep])
+      data[, dep] <- factor(data[, dep])
     } else {
       outcome <- data[, dep]
     }
@@ -230,9 +231,13 @@ fit <-
     if (classifier == "lr") {
       full.model <- glm(f, data = data, family = "binomial")
     } else if (classifier == "rf") {
-      full.model <- randomForest(x = data[, indep],
-                                 y = outcome,
-                                 ntree = classifier.params$rf.ntree)
+      full.model <- ranger(
+        f,
+        data = data,
+        num.trees = classifier.params$rf.ntree,
+        classification = TRUE,
+        importance = "permutation"
+      )
     } else if (classifier == "c5.0") {
       full.model <- C5.0(data[, indep],
                          outcome,

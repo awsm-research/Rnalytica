@@ -4,8 +4,8 @@
 \alias{AutoSpearman}
 \title{AutoSpearman - an automated variable selection approach based on the contemporary correlation analyses}
 \usage{
-AutoSpearman(dataset, metrics, spearman.threshold = 0.7,
-  vif.threshold = 5, verbose = F)
+AutoSpearman(dataset, metrics, spearman.threshold = 0.7, vif.threshold = 5,
+  verbose = F)
 }
 \arguments{
 \item{dataset}{a data frame for data}
