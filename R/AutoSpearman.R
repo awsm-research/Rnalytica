@@ -20,7 +20,16 @@ AutoSpearman <-
            spearman.threshold = 0.7,
            vif.threshold = 5,
            verbose = F) {
-
+    
+    # Check metrics that are constant
+    constant.metrics <- metrics[apply(dataset[, metrics], 2, function(x) max(x) == 
+                                      min(x))]
+    if(length(constant.metrics) != 0){
+      cat('There are constant metrics:\n')
+      cat(paste0(constant.metrics, collapse = ', '))
+      stop('Please mitigate (e.g., remove) prior to applying AutoSpearman')
+    }
+    
     spearman.metrics <- get.automated.spearman(dataset, metrics, spearman.threshold, verbose)
     AutoSpearman.metrics <- stepwise.vif(dataset, spearman.metrics, vif.threshold, verbose)
 

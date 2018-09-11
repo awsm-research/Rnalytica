@@ -5,8 +5,9 @@
 \title{A single fit function}
 \usage{
 single.fit(training.data, testing.data, dep, indep, classifier = "lr",
-  classifier.params = list(rf.ntree = 100, c5.0.trials = 40, c5.0.rules =
-  TRUE), params.tuning = F, prob.threshold)
+  classifier.params = list(rf.ntree = 100, rf.mtry = NULL, c5.0.trials = 40,
+  c5.0.rules = TRUE, c5.0.winnow = FALSE, nb.fL = 0, nb.adjust = 1, svm.gamma =
+  NULL, svm.cost = 1), params.tuning = F, prob.threshold = 0.5)
 }
 \arguments{
 \item{training.data}{a dataframe for training data}
@@ -17,11 +18,13 @@ single.fit(training.data, testing.data, dep, indep, classifier = "lr",
 
 \item{indep}{a vector of characters for independent variables}
 
-\item{classifier}{a character for classifier techniques, i.e., lr, rf, c5.0, and nb (default: "lr")}
+\item{classifier}{a character for classifier techniques, i.e., lr, rf, c5.0, nb, and svm}
 
-\item{classifier.params}{a list of parameters for an input classifier technique (default: list(rf.ntree = 100, c5.0.trials = 40, c5.0.rules = TRUE)}
+\item{classifier.params}{a list of parameters for an input classifier technique}
 
 \item{params.tuning}{a boolean indicates whether to perform parameters tuning}
+
+\item{prob.threshold}{a numeric for probability threshold (default: 0.5)}
 }
 \description{
 A single fit function

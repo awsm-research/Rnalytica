@@ -2,13 +2,14 @@
 % Please edit documentation in R/fit.R
 \name{fit}
 \alias{fit}
-\title{Universal fit function}
+\title{Universal fit function (Sequential)}
 \usage{
 fit(data, dep, indep, classifier = "lr", classifier.params = list(rf.ntree =
-  100, c5.0.trials = 40, c5.0.rules = TRUE), params.tuning = FALSE,
-  normalize = "no", rebalance = "no", validation = "boot",
-  validation.params = list(cv.k = 10, boot.n = 100), prob.threshold = 0.5,
-  repeats = 1)
+  100, rf.mtry = NULL, c5.0.trials = 40, c5.0.rules = TRUE, c5.0.winnow = FALSE,
+  nb.fL = 0, nb.adjust = 1, svm.gamma = NULL, svm.cost = 1),
+  params.tuning = FALSE, normalize = "no", rebalance = "no",
+  validation = "boot", validation.params = list(cv.k = 10, boot.n = 100),
+  prob.threshold = 0.5, repeats = 1)
 }
 \arguments{
 \item{data}{a dataframe for input data}
@@ -17,9 +18,9 @@ fit(data, dep, indep, classifier = "lr", classifier.params = list(rf.ntree =
 
 \item{indep}{a vector of characters for independent variables}
 
-\item{classifier}{a character for classifier techniques, i.e., lr, rf, c5.0, and nb (default: "lr")}
+\item{classifier}{a character for classifier techniques, i.e., lr, rf, c5.0, nb, and svm}
 
-\item{classifier.params}{a list of parameters for an input classifier technique (default: list(rf.ntree = 100, c5.0.trials = 40, c5.0.rules = TRUE)}
+\item{classifier.params}{a list of parameters for an input classifier technique}
 
 \item{params.tuning}{a boolean indicates whether to perform parameters tuning}
 
@@ -36,6 +37,6 @@ fit(data, dep, indep, classifier = "lr", classifier.params = list(rf.ntree =
 \item{repeats}{a numeric for number of repetitions (default: 1)}
 }
 \description{
-Universal fit function
+Universal fit function (Sequential)
 }
 \keyword{fit}
