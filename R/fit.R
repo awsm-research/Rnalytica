@@ -1,4 +1,5 @@
 
+
 #' Universal fit function (Sequential)
 #'
 #'
@@ -102,10 +103,10 @@ fit <-
           indices <- training.indices[[r]][[i]]
           
           # Generate training dataset
-          training <- data[indices, ]
+          training <- data[indices,]
           
           # Generate testing dataset
-          testing <- data[-unique(indices), ]
+          testing <- data[-unique(indices),]
           
           ## Data Preprocessing
           
@@ -208,30 +209,16 @@ fit <-
             training <- SMOTE(f, data = training)
           } # else no
           
-          # TODO WORK ON PARAMETER TUNING
-          # if(params.tuning){
-          #   if (classifier == "lr") {
-          #
-          #   } else if (classifier == "rf") {
-          #
-          #   } else if (classifier == "c5.0") {
-          #
-          #   } else if (classifier == "nb") {
-          #   }  else if (classifier == "svm") {
-          #     tune.svm(f, data = training, kernel="radial", cost=10^(-1:2), gamma=c(.5,1,2))
-          #   }
-          # }
-          
           t.start <- Sys.time()
           fit.object <- single.fit(
-            training,
-            testing,
-            dep,
-            indep,
-            classifier,
-            classifier.params,
-            params.tuning,
-            prob.threshold
+            training.data = training,
+            testing.data = testing,
+            dep = dep,
+            indep = indep,
+            classifier = classifier,
+            classifier.params = classifier.params,
+            params.tuning = params.tuning,
+            prob.threshold = prob.threshold
           )
           t.end <- Sys.time()
           
@@ -245,15 +232,16 @@ fit <-
     
     # Construct full model
     full.model <- single.fit(
-      data,
-      NULL,
-      dep,
-      indep,
-      classifier,
-      classifier.params,
-      params.tuning,
-      prob.threshold
+      training.data = data,
+      testing.data = NULL,
+      dep = dep,
+      indep = indep,
+      classifier = classifier,
+      classifier.params = classifier.params,
+      params.tuning = params.tuning,
+      prob.threshold = prob.threshold
     )
+    
     
     return(
       list(
