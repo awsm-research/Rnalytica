@@ -1,6 +1,7 @@
 
 
-#' Universal fit function (Sequential)
+
+#' Universal fit function (Parallel)
 #'
 #'
 #' @param data a dataframe for input data
@@ -15,11 +16,11 @@
 #' @param validation.params a list of parameters for an input validation techniques (default: list(cv.k = 10, boot.n = 100))
 #' @param prob.threshold a numeric for probability threshold (default: 0.5)
 #' @param repeats a numeric for number of repetitions (default: 1)
-#' @import caret C50 e1071 car ranger DMwR
+#' @import caret C50 e1071 car ranger DMwR doMC
 #' @importFrom stats as.formula glm predict sd
 #' @keywords fit
 #' @export
-fit <-
+fit.parallel <-
   function(data,
            dep,
            indep,
@@ -43,8 +44,10 @@ fit <-
            validation = "boot",
            validation.params = list(cv.k = 10, boot.n = 100),
            prob.threshold = 0.5,
-           repeats = 1) {
+           repeats = 1,
+           n.cores = 2) {
     # Init variables
+    registerDoMC(n.cores)
     data.nrow <- nrow(data)
     outcome <- NULL
     if (!is.factor(data[, dep])) {
@@ -96,17 +99,18 @@ fit <-
       for (r in 1:repeats) {
         # Repetition loop START
         
-        for (i in 1:seq.length) {
+        results <- foreach(i = 1:seq.length) %dopar% {
+          # for (i in 1:seq.length) {
           # N-Bootstrap or k-cv loop START
           
           # Get training indices at r-th repetition and i-th sample
           indices <- training.indices[[r]][[i]]
           
           # Generate training dataset
-          training <- data[indices,]
+          training <- data[indices, ]
           
           # Generate testing dataset
-          testing <- data[-unique(indices),]
+          testing <- data[-unique(indices), ]
           
           ## Data Preprocessing
           
@@ -118,7 +122,10 @@ fit <-
             tmp <- data.frame(
               sapply(seq_along(indep),
                      function(index, x, x.mean, x.sd) {
-                       return((x[, index] - x.mean[index]) / x.sd[index])
+                       if (x.sd[index] == 0)
+                         return(x[, index])
+                       return((x[, index] - x.mean[index]) /
+                                x.sd[index])
                      },
                      x = training[, indep],
                      x.mean = train.mean.values,
@@ -132,7 +139,10 @@ fit <-
             tmp <- data.frame(
               sapply(seq_along(indep),
                      function(index, x, x.mean, x.sd) {
-                       return((x[, index] - x.mean[index]) / x.sd[index])
+                       if (x.sd[index] == 0)
+                         return(x[, index])
+                       return((x[, index] - x.mean[index]) /
+                                x.sd[index])
                      },
                      x = testing[, indep],
                      x.mean = train.mean.values,
@@ -145,6 +155,8 @@ fit <-
             # normalize training
             tmp <- data.frame(sapply(seq_along(indep),
                                      function(index, x, x.sd) {
+                                       if (x.sd[index] == 0)
+                                         return(x[, index])
                                        return((x[, index]) / x.sd[index])
                                      },
                                      x = training[, indep],
@@ -156,6 +168,8 @@ fit <-
             # normalize testing with mean and sd of training (https://stats.stackexchange.com/questions/174823/how-to-apply-standardization-normalization-to-train-and-testset-if-prediction-i)
             tmp <- data.frame(sapply(seq_along(indep),
                                      function(index, x, x.sd) {
+                                       if (x.sd[index] == 0)
+                                         return(x[, index])
                                        return((x[, index]) / x.sd[index])
                                      },
                                      x = testing[, indep],
@@ -221,12 +235,28 @@ fit <-
             prob.threshold = prob.threshold
           )
           t.end <- Sys.time()
-          
-          importance <- rbind(importance, fit.object$importance)
-          performance <- rbind(performance, fit.object$performance)
-          execution.time <- rbind(execution.time, t.end - t.start)
-          
+          return(
+            list(
+              performance = fit.object$performance,
+              importance = fit.object$importance,
+              execution.time = t.end - t.start
+            )
+          )
         } # n-bootstrap or k-cv loop END
+        importance <-
+          rbind(importance, do.call(rbind, lapply(results, function(x)
+            return(x$importance))))
+        performance <-
+          rbind(performance, do.call(rbind, lapply(results, function(x)
+            return(
+              x$performance
+            ))))
+        execution.time <-
+          rbind(execution.time, do.call(rbind, lapply(results, function(x)
+            return(
+              x$execution.time
+            ))))
+        
       } # Repetition loop END
     } #else no validation - constructing a model with the whole dataset
     
