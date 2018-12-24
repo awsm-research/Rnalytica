@@ -12,7 +12,8 @@ indexing <- function(){
         "ck" = getSystemName(list.files("inst/extdata/terapromise/ck")),
         "eclipse" = getSystemName(list.files("inst/extdata/zimmermann")),
         "kim" = getSystemName(list.files("inst/extdata/kim")) ,
-        "ambros" = getSystemName(list.files("inst/extdata/ambros"))
+        "ambros" = getSystemName(list.files("inst/extdata/ambros")),
+        "jira" = getSystemName(list.files("inst/extdata/jira"))
     )
     
     index <- melt(index)

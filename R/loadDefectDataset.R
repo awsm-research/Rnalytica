@@ -17,7 +17,7 @@
 #' 
 loadDefectDataset <- function(system_name,corpus=""){
 
-    corpus <- ifelse(corpus == "", listDataset[listDataset$system == system_name,]$corpus,corpus)
+    # corpus <- ifelse(corpus == "", listDataset[listDataset$system == system_name,]$corpus,corpus)
 
     read.mccabe <- function(system_name){
         filename <- system.file("extdata/terapromise/mccabe",paste0(system_name,".arff"), package = "Rnalytica")
@@ -75,13 +75,26 @@ loadDefectDataset <- function(system_name,corpus=""){
         data[,dep] <- ifelse(data[,dep] > 0, T, F)
         return(list(data = data[,c(indep,dep)], dep = dep, indep = indep))
     }
+    
+    read.jira <- function(system_name){
+      
+      filename <- system.file("extdata/jira/",paste0(system_name,".csv"), package = "Rnalytica")
+      data <- read.csv(filename)
+      data$HeuBug <- as.factor(data$HeuBug)
+      data$RealBug <- as.factor(data$RealBug)
+      dep <- "RealBug"
+      indep <- colnames(data)[c(2:66)]
+      return(list(data = data[,c(indep,dep)], dep = dep, indep = indep))
+    }
+    
     pool <- NULL
     switch(corpus, 
            mccabe={    pool <- read.mccabe(system_name) },
            ck={     pool <- read.ck(system_name) },
            eclipse={    pool <- read.eclipse(system_name) },
            kim={    pool <- read.kim(system_name) },
-           ambros={    pool <- read.ambros(system_name) }
+           ambros={    pool <- read.ambros(system_name) },
+           jira={    pool <- read.jira(system_name) }
     )  
     pool
 }
