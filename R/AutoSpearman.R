@@ -21,13 +21,20 @@ AutoSpearman <-
            vif.threshold = 5,
            verbose = F) {
     
-    # Check metrics that are constant
-    constant.metrics <- metrics[apply(dataset[, metrics], 2, function(x) max(x) == 
-                                      min(x))]
-    if(length(constant.metrics) != 0){
-      cat('There are constant metrics:\n')
-      cat(paste0(constant.metrics, collapse = ', '))
-      stop('Please mitigate (e.g., remove) prior to applying AutoSpearman')
+    # Check constant metrics
+    constant <- apply(dataset[, metrics], 2, function(x) max(x) == min(x))
+    constant <- names(constant[constant == TRUE])
+    # Remove constant metrics
+    if(length(constant) > 0){
+      metrics <- metrics[!metrics %in% constant]
+    }
+    
+    # Check categorical metrics
+    category <- sapply(dataset[, metrics], class)
+    category <- names(category[category=="character"])
+    # Remove categorical metrics
+    if(length(category) > 0){
+      metrics <- metrics[!metrics %in% category]
     }
     
     spearman.metrics <- get.automated.spearman(dataset, metrics, spearman.threshold, verbose)
