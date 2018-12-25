@@ -1,23 +1,29 @@
 Package: Rnalytica
-Title: Rnalytica
-Version: 0.1
-Authors@R: person("First", "Last", email = "first.last@example.com", role = c("aut", "cre"))
-Description: An R package of the Miscellaneous Functions for Data Analytics Research.
-Depends: 
-	C50,
+Title: An R package of JIRA defect datasets and tool suites for explainable software analytics
+Description: An R package of JIRA defect datasets and tool suites for explainable software analytics.
+Version: 0.1.1
+Authors@R: c(
+  person("Chakkrit", "Tantithamthavorn", email = "chakkrit.tantithamthavorn@monash.edu", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-5516-9984")),
+  person("Jirayus", "Jiarpakdee", email = "jirayus.jiarpakdee@adelaide.edu.au", role = c("aut","ctb"))
+  )
+Maintainer: Chakkrit Tantithamthavorn <chakkrit.tantithamthavorn@monash.edu>
+Imports: 
 	Hmisc,
-	car,
+	rms,
+	C50,
 	caret,
 	dendextend,
-	e1071,
 	pROC,
 	reshape2,
 	foreign,
-	rms,
 	DMwR,
 	doMC,
-	ranger
-License: What license is it under?
+	ranger,
+	e1071,
+	foreach
+License: GPL (>= 2)
+URL: https://github.com/software-analytics/Rnalytica/
+BugReports: https://github.com/software-analytics/Rnalytica/issues
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1

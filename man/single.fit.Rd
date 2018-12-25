@@ -5,9 +5,10 @@
 \title{A single fit function}
 \usage{
 single.fit(training.data, testing.data, dep, indep, classifier = "lr",
-  classifier.params = list(rf.ntree = 100, rf.mtry = NULL, c5.0.trials = 40,
-  c5.0.rules = TRUE, c5.0.winnow = FALSE, nb.fL = 0, nb.adjust = 1, svm.gamma =
-  NULL, svm.cost = 1), params.tuning = F, prob.threshold = 0.5)
+  classifier.params = list(rf.ntree = 100, rf.mtry = NULL, c5.0.trials =
+  40, c5.0.rules = TRUE, c5.0.winnow = FALSE, nb.fL = 0, nb.adjust = 1,
+  svm.gamma = NULL, svm.cost = 1), params.tuning = F,
+  prob.threshold = 0.5)
 }
 \arguments{
 \item{training.data}{a dataframe for training data}

@@ -11,8 +11,10 @@
 #' @param spearman.threshold a numeric for a threshold of Spearman rank correlation test (default = 0.7)
 #' @param vif.threshold a numeric for a threshold of VIF score (default = 5)
 #' @param verbose  TRUE for printing
-#' @import Hmisc rms
 #' @keywords AutoSpearman
+#' @examples 
+#' Data = loadDefectDataset('groovy-1_5_7','jira')
+#' AutoSpearman(dataset = Data$data, metrics = Data$indep)
 #' @export
 AutoSpearman <-
   function(dataset,

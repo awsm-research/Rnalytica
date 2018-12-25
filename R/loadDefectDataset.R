@@ -4,16 +4,16 @@
 #'
 #' @param system_name system_name name
 #' @param corpus corpus
-#' @import e1071 foreign
+#' @importFrom foreign read.arff
 #' @importFrom utils read.csv
 #' @export
 #' @return an object of data
 #' 
 #' @examples
-#' data <- loadDefectDataset("jdt")
-#' data$dep
-#' data$indep
-#' data$data
+#' Data = loadDefectDataset('groovy-1_5_7','jira')
+#' dep <- Data$dep
+#' indep <- Data$indep
+#' data <- Data$data
 #' 
 loadDefectDataset <- function(system_name,corpus=""){
 

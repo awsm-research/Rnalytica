@@ -4,15 +4,12 @@
 \name{listDataset}
 \alias{listDataset}
 \title{List of defect datasets}
-\format{A data frame with 101 rows and 7 variables}
-\source{
-\url{http://www.openscience.us/repo}
-}
+\format{A data frame with 133 rows and 7 variables}
 \usage{
 listDataset
 }
 \description{
-This command lists all defect datasets that are available in this R package
+This command lists all 133 defect datasets that are available in this R package
 }
 \details{
 \itemize{

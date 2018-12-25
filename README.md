@@ -1,6 +1,6 @@
 # Rnalytica [![Build Status](https://travis-ci.org/software-analytics/Rnalytica.svg?branch=master)](https://travis-ci.org/software-analytics/Rnalytica)
 
-An R package of the Miscellaneous Functions for Data Analytics Research
+An R package of JIRA defect datasets and tool suites for explainable software analytics.
 
 ### Install
 To prepare execution enrionment, please run the command below in terminal.
@@ -15,24 +15,29 @@ install.packages('devtools')
 devtools::install_github('software-analytics/Rnalytica')
 ```
 
-### Examples
+### Usage
 
-To load a defect dataset from a collection of publicly-available defect datasets:
+To load the library:
 ```r
-library('Rnalytica')
-Data = loadDefectDataset('eclipse-2.0')
+library(Rnalytica)
+```
+
+To list all 131 defect datasets:
+```r
+listDataset
+```
+
+To load a defect dataset from the Rnalytica R package:
+```r
+Data = loadDefectDataset('groovy-1_5_7','jira')
 ```
 
 To visualize pair-wise correlations among input metrics and presents using a visualization of the hierarchical cluster analysis:
 ```r
-library('Rnalytica')
-Data = loadDefectDataset('eclipse-2.0')
-plotVarClus(dataset = Data$data, metrics = Data$indep, correlation = 'spearman', correlation.threshold = 0.7)
+plotVarClus(dataset = Data$data, metrics = Data$indep)
 ```
 
-To automatically mitigate correlated metrics with AutoSpearman:
+To automatically remove irrelevant metrics and mitigate correlated metrics with AutoSpearman:
 ```r
-library('Rnalytica')
-Data = loadDefectDataset('eclipse-2.0')
-AutoSpearman(dataset = Data$data, metrics = Data$indep, spearman.threshold = 0.7, vif.threshold = 5)
+AutoSpearman(dataset = Data$data, metrics = Data$indep)
 ```

@@ -1,6 +1,6 @@
-# # 
-# # 
-# # # 
+# #
+# #
+# # #
 # library(Rnalytica)
 
 # Data <- loadDefectDataset('eclipse-2.0')
@@ -25,7 +25,7 @@
 #   validation.params = list(boot.n = 4),
 #   nCore = 4
 # )
-# # 
+# #
 # dataset.paths <- list.files('/Users/jirayusjiarpakdee/Dropbox/Source/Repository/reevaluate-factors-performance/datasets/')
 #
 # i = 1
@@ -66,7 +66,7 @@
 #   fit.parallel(dataset, dep, indep, classifier = c.index, validation.params = list(boot.n=4), params.tuning = T)
 #   print(paste0(c.index, ' done'))
 # }
- 
+
 
 # fit.parallel(dataset,
 #          dep,
@@ -83,4 +83,4 @@
 #          prob.threshold = 0.5,
 #          repeats = 1,
 #          nCore = 4)
-# 
+#

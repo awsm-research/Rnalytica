@@ -1,6 +1,6 @@
 #' List of defect datasets
 #'
-#' This command lists all defect datasets that are available in this R package
+#' This command lists all 133 defect datasets that are available in this R package
 #'
 #' \itemize{
 #'   \item system. the system name.
@@ -11,7 +11,6 @@
 #'   \item Predictors. the number of predictors (independent variable).
 #'   \item EPV. the number of event per variables (EPV).
 #' }
-#' @format A data frame with 101 rows and 7 variables
-#' @source \url{http://www.openscience.us/repo}
+#' @format A data frame with 133 rows and 7 variables
 #' @name listDataset
 "listDataset"

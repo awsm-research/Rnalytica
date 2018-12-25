@@ -18,9 +18,9 @@ an object of data
 This function allows you to load defect dataset in software engineering research
 }
 \examples{
-data <- loadDefectDataset("jdt")
-data$dep
-data$indep
-data$data
+Data = loadDefectDataset('groovy-1_5_7','jira')
+dep <- Data$dep
+indep <- Data$indep
+data <- Data$data
 
 }

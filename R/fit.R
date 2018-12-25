@@ -15,7 +15,8 @@
 #' @param validation.params a list of parameters for an input validation techniques (default: list(cv.k = 10, boot.n = 100))
 #' @param prob.threshold a numeric for probability threshold (default: 0.5)
 #' @param repeats a numeric for number of repetitions (default: 1)
-#' @import caret C50 e1071 car ranger DMwR
+#' @importFrom caret createFolds downSample upSample
+#' @importFrom DMwR SMOTE
 #' @importFrom stats as.formula glm predict sd
 #' @keywords fit
 #' @export
