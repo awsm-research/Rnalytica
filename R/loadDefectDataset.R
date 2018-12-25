@@ -4,16 +4,16 @@
 #'
 #' @param system_name system_name name
 #' @param corpus corpus
-#' @import e1071 foreign
+#' @importFrom foreign read.arff
 #' @importFrom utils read.csv
 #' @export
 #' @return an object of data
 #' 
 #' @examples
-#' data <- loadDefectDataset("jdt")
-#' data$dep
-#' data$indep
-#' data$data
+#' Data = loadDefectDataset('groovy-1_5_7','jira')
+#' dep <- Data$dep
+#' indep <- Data$indep
+#' data <- Data$data
 #' 
 loadDefectDataset <- function(system_name,corpus=""){
 
@@ -75,13 +75,25 @@ loadDefectDataset <- function(system_name,corpus=""){
         data[,dep] <- ifelse(data[,dep] > 0, T, F)
         return(list(data = data[,c(indep,dep)], dep = dep, indep = indep))
     }
+    
+    read.jira <- function(system_name){
+      filename <- system.file("extdata/jira/",paste0(system_name,".csv"), package = "Rnalytica")
+      data <- read.csv(filename)
+      data$HeuBug <- as.factor(data$HeuBug)
+      data$RealBug <- as.factor(data$RealBug)
+      dep <- "RealBug"
+      indep <- colnames(data)[c(2:66)]
+      return(list(data = data[,c(indep,dep)], dep = dep, indep = indep))
+    }
+    
     pool <- NULL
     switch(corpus, 
            mccabe={    pool <- read.mccabe(system_name) },
            ck={     pool <- read.ck(system_name) },
            eclipse={    pool <- read.eclipse(system_name) },
            kim={    pool <- read.kim(system_name) },
-           ambros={    pool <- read.ambros(system_name) }
+           ambros={    pool <- read.ambros(system_name) },
+           jira={    pool <- read.jira(system_name) }
     )  
     pool
 }

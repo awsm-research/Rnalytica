@@ -6,9 +6,9 @@
 #' @param metrics  a characters or a vector of characters for independent variables
 #' @param spearman.threshold a numeric for a threshold of Spearman rank correlation test (default = 0.7)
 #' @param verbose  TRUE for printing
-#' @import Hmisc
+#' @importFrom Hmisc rcorr
 #' @keywords Spearman
-#' @export
+
 
 get.automated.spearman <- function(dataset, metrics, spearman.threshold, verbose = F){
 

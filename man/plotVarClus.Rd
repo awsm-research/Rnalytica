@@ -19,4 +19,8 @@ plotVarClus(dataset, metrics, correlation = "spearman",
 \description{
 This function makes life simple by providing a VarClus plot.
 }
+\examples{
+Data = loadDefectDataset('camel-1.0','ck')
+plotVarClus(dataset = Data$data, metrics = Data$indep)
+}
 \keyword{VarClus}

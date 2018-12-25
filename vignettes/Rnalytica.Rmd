@@ -1,0 +1,11 @@
+---
+title: "Introduction to Rnalytica"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction to Rnalytica}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+Rnalytica is an R package of JIRA defect datasets and tool suites for explainable software analytics.
+

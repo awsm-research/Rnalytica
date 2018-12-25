@@ -5,11 +5,12 @@
 \title{Universal fit function (Parallel)}
 \usage{
 fit.parallel(data, dep, indep, classifier = "lr",
-  classifier.params = list(rf.ntree = 100, rf.mtry = NULL, c5.0.trials = 40,
-  c5.0.rules = TRUE, c5.0.winnow = FALSE, nb.fL = 0, nb.adjust = 1, svm.gamma =
-  NULL, svm.cost = 1), params.tuning = FALSE, normalize = "no",
-  rebalance = "no", validation = "boot", validation.params = list(cv.k =
-  10, boot.n = 100), prob.threshold = 0.5, repeats = 1, n.cores = 2)
+  classifier.params = list(rf.ntree = 100, rf.mtry = NULL, c5.0.trials =
+  40, c5.0.rules = TRUE, c5.0.winnow = FALSE, nb.fL = 0, nb.adjust = 1,
+  svm.gamma = NULL, svm.cost = 1), params.tuning = FALSE,
+  normalize = "no", rebalance = "no", validation = "boot",
+  validation.params = list(cv.k = 10, boot.n = 100),
+  prob.threshold = 0.5, repeats = 1, n.cores = 2)
 }
 \arguments{
 \item{data}{a dataframe for input data}

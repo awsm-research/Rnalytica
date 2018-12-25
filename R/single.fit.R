@@ -10,7 +10,10 @@
 #' @param classifier.params a list of parameters for an input classifier technique
 #' @param params.tuning a boolean indicates whether to perform parameters tuning
 #' @param prob.threshold a numeric for probability threshold (default: 0.5)
-#' @import caret C50 car ranger e1071
+#' @importFrom caret train
+#' @importFrom C50 C5.0 
+#' @importFrom ranger ranger
+#' @importFrom e1071 svm
 #' @importFrom stats as.formula glm predict
 #' @keywords fit
 #' @export

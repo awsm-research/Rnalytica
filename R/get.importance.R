@@ -6,7 +6,7 @@
 #'
 #' @param model a logistic regression or random forest model
 #' @param normalized a logical to indicate whether to normalize importance scores
-#' @import car ranger
+
 #' @importFrom stats anova
 #' @keywords interpretation
 #' @export
