@@ -1,4 +1,4 @@
-# Rnalytica [![Build Status](https://travis-ci.org/software-analytics/Rnalytica.svg?branch=master)](https://travis-ci.org/software-analytics/Rnalytica)
+# Rnalytica [![Build Status](https://travis-ci.org/awsm-research/Rnalytica.svg?branch=master)](https://travis-ci.org/awsm-research/Rnalytica)
 
 An R package of JIRA defect datasets and tool suites for explainable software analytics.
 
