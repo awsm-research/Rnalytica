@@ -34,7 +34,7 @@ AutoSpearman <-
     # Check categorical metrics
     category <- sapply(dataset[, metrics], class)
     category <- names(category[category=="character"])
-    # Remove categorical metrics
+    # Remove categorical metrics from Spearman Analysis
     if(length(category) > 0){
       metrics <- metrics[!metrics %in% category]
     }
@@ -42,5 +42,5 @@ AutoSpearman <-
     spearman.metrics <- get.automated.spearman(dataset, metrics, spearman.threshold, verbose)
     AutoSpearman.metrics <- stepwise.vif(dataset, spearman.metrics, vif.threshold, verbose)
 
-    return(AutoSpearman.metrics)
+    return(c(AutoSpearman.metrics,category))
   }

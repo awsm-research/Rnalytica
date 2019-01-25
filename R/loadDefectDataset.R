@@ -83,7 +83,7 @@ loadDefectDataset <- function(system_name,corpus=""){
       data$RealBug <- as.factor(data$RealBug)
       dep <- "RealBug"
       indep <- colnames(data)[c(2:66)]
-      return(list(data = data[,c(indep,dep)], dep = dep, indep = indep))
+      return(list(data = data[,c(indep,dep,"HeuBug","HeuBugCount","RealBugCount")], dep = dep, indep = indep))
     }
     
     pool <- NULL

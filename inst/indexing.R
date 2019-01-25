@@ -8,12 +8,12 @@ indexing <- function(){
     getSystemName <- function(data) {sapply(strsplit(basename(data),"\\."), function(x) paste(x[1:(length(x)-1)], collapse="."))}
     
     index <- list(
+        "jira" = getSystemName(list.files("inst/extdata/jira")),
         "mccabe" = getSystemName(list.files("inst/extdata/terapromise/mccabe")),
         "ck" = getSystemName(list.files("inst/extdata/terapromise/ck")),
         "eclipse" = getSystemName(list.files("inst/extdata/zimmermann")),
         "kim" = getSystemName(list.files("inst/extdata/kim")) ,
-        "ambros" = getSystemName(list.files("inst/extdata/ambros")),
-        "jira" = getSystemName(list.files("inst/extdata/jira"))
+        "ambros" = getSystemName(list.files("inst/extdata/ambros"))
     )
     
     index <- melt(index)
@@ -39,4 +39,4 @@ indexing <- function(){
 
 listDataset <- indexing()
 colnames(listDataset) <- c("system","corpus","DefectiveRatio","Modules","Defective","Predictors","EPV")
-save(listDataset,file="data/listDataset.Rdata")
+save(listDataset,file="data/listDataset.rda")
