@@ -9,6 +9,7 @@ Authors@R: c(
 Maintainer: Chakkrit Tantithamthavorn <chakkrit.tantithamthavorn@monash.edu>
 Imports: 
 	Hmisc,
+	car,
 	rms,
 	C50,
 	caret,
@@ -17,7 +18,7 @@ Imports:
 	reshape2,
 	foreign,
 	DMwR,
-	doMC,
+	doParallel,
 	ranger,
 	e1071,
 	foreach

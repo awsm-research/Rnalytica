@@ -36,6 +36,8 @@ fit.parallel(data, dep, indep, classifier = "lr",
 \item{prob.threshold}{a numeric for probability threshold (default: 0.5)}
 
 \item{repeats}{a numeric for number of repetitions (default: 1)}
+
+\item{n.cores}{a numeric for number of cores (default: 2)}
 }
 \description{
 Universal fit function (Parallel)

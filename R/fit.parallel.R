@@ -16,10 +16,12 @@
 #' @param validation.params a list of parameters for an input validation techniques (default: list(cv.k = 10, boot.n = 100))
 #' @param prob.threshold a numeric for probability threshold (default: 0.5)
 #' @param repeats a numeric for number of repetitions (default: 1)
+#' @param n.cores a numeric for number of cores (default: 2)
 #' @importFrom caret createFolds downSample upSample
 #' @importFrom DMwR SMOTE
 #' @importFrom foreach foreach
 #' @importFrom stats as.formula glm predict sd
+#' @importFrom doParallel registerDoParallel
 #' @keywords fit
 
 fit.parallel <-
@@ -49,7 +51,7 @@ fit.parallel <-
            repeats = 1,
            n.cores = 2) {
     # Init variables
-    registerDoMC(n.cores)
+    registerDoParallel(cores = n.cores)
     data.nrow <- nrow(data)
     outcome <- NULL
     if (!is.factor(data[, dep])) {
