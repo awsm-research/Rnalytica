@@ -12,7 +12,7 @@
 #' @param vif.threshold a numeric for a threshold of VIF score (default = 5)
 #' @param verbose  TRUE for printing
 #' @keywords AutoSpearman
-#' @examples 
+#' @examples
 #' Data = loadDefectDataset('groovy-1_5_7','jira')
 #' AutoSpearman(dataset = Data$data, metrics = Data$indep)
 #' @export
@@ -22,25 +22,14 @@ AutoSpearman <-
            spearman.threshold = 0.7,
            vif.threshold = 5,
            verbose = F) {
+    # Check constant metrics and categorical metrics
+    metrics <- check.constant.categorical(dataset, metrics)
     
-    # Check constant metrics
-    constant <- apply(dataset[, metrics], 2, function(x) max(x) == min(x))
-    constant <- names(constant[constant == TRUE])
-    # Remove constant metrics
-    if(length(constant) > 0){
-      metrics <- metrics[!metrics %in% constant]
-    }
     
-    # Check categorical metrics
-    category <- sapply(dataset[, metrics], class)
-    category <- names(category[category=="character"])
-    # Remove categorical metrics from Spearman Analysis
-    if(length(category) > 0){
-      metrics <- metrics[!metrics %in% category]
-    }
+    spearman.metrics <-
+      get.automated.spearman(dataset, metrics, spearman.threshold, verbose)
+    AutoSpearman.metrics <-
+      stepwise.vif(dataset, spearman.metrics, vif.threshold, verbose)
     
-    spearman.metrics <- get.automated.spearman(dataset, metrics, spearman.threshold, verbose)
-    AutoSpearman.metrics <- stepwise.vif(dataset, spearman.metrics, vif.threshold, verbose)
-
-    return(c(AutoSpearman.metrics,category))
+    return(AutoSpearman.metrics)
   }

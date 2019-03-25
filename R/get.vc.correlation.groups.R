@@ -1,4 +1,4 @@
-#' Get VarClus based on the absolute Spearman correlation coefficients between metrics
+#' Get correlation groups according to VarClus based on the absolute Spearman correlation coefficients between metrics
 #'
 #' This function makes life simple by providing a VarClus.
 #' @param dataset  a data frame for data
@@ -8,7 +8,7 @@
 #' @importFrom Hmisc varclus
 #' @keywords VarClus
 
-get.vc <- function(dataset, metrics, similarity = 'spearman', varclus.threshold = 0.7){
+get.vc.correlation.groups <- function(dataset, metrics, similarity = 'spearman', varclus.threshold = 0.7){
   
   # Check constant metrics and categorical metrics
   metrics <- check.constant.categorical(dataset, metrics)
@@ -16,12 +16,15 @@ get.vc <- function(dataset, metrics, similarity = 'spearman', varclus.threshold 
   f <- as.formula(paste("~", paste(metrics, collapse = " + ")))
   vc <-
     Hmisc::varclus(f,
-            similarity = similarity,
-            data = dataset[, metrics],
-            trans = "abs")
-  vc$threshold <- varclus.threshold
-  vc$metrics <- metrics
-  vc$dataset <- dataset
-  class(vc) <- c('summarizedvc')
-  return(vc)
+                   similarity = similarity,
+                   data = dataset[, metrics],
+                   trans = "abs")
+  
+  var.clusters <-
+    cutree(vc$hclust, h = (1 - varclus.threshold))
+  melted.data <- melt(var.clusters)
+  varclus.correlation.groups <- data.frame(metrics = row.names(melted.data), rank = var.clusters)
+  row.names(varclus.correlation.groups) <- NULL
+  
+  return(varclus.correlation.groups)
 }

@@ -2,6 +2,7 @@
 
 S3method(plot,summarizedvc)
 export(AutoSpearman)
+export(check.constant.categorical)
 export(fit)
 export(get.importance)
 export(loadDefectDataset)
