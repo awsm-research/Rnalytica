@@ -9,6 +9,10 @@
 #' @keywords VarClus
 
 get.vc <- function(dataset, metrics, similarity = 'spearman', varclus.threshold = 0.7){
+  
+  # remove constant metrics and categorical metrics
+  metrics <- remove.constant.categorical(dataset, metrics)
+  
   f <- as.formula(paste("~", paste(metrics, collapse = " + ")))
   vc <-
     Hmisc::varclus(f,
