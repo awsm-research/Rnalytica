@@ -22,8 +22,8 @@ AutoSpearman <-
            spearman.threshold = 0.7,
            vif.threshold = 5,
            verbose = F) {
-    # Check constant metrics and categorical metrics
-    metrics <- check.constant.categorical(dataset, metrics)
+    # Remove constant metrics and categorical metrics
+    metrics <- remove.constant.categorical(dataset, metrics)
     
     
     spearman.metrics <-

@@ -10,8 +10,8 @@
 
 get.vc <- function(dataset, metrics, similarity = 'spearman', varclus.threshold = 0.7){
   
-  # Check constant metrics and categorical metrics
-  metrics <- check.constant.categorical(dataset, metrics)
+  # remove constant metrics and categorical metrics
+  metrics <- remove.constant.categorical(dataset, metrics)
   
   f <- as.formula(paste("~", paste(metrics, collapse = " + ")))
   vc <-

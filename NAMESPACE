@@ -2,12 +2,12 @@
 
 S3method(plot,summarizedvc)
 export(AutoSpearman)
-export(check.constant.categorical)
 export(fit)
 export(get.importance)
 export(loadDefectDataset)
 export(performance.calculation)
 export(plotVarClus)
+export(remove.constant.categorical)
 export(single.fit)
 export(stepwise.vif)
 import(dendextend)
