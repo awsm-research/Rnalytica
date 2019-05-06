@@ -4,7 +4,7 @@ An R package of JIRA defect datasets and tool suites for explainable software an
 
 ### Download and Reference for the JIRA defect datasets
 
-[JIRA defect datasets](https://github.com/awsm-research/Rnalytica/blob/master/jira-defect-datasets.zip)
+[JIRA defect datasets](https://github.com/awsm-research/Rnalytica/blob/master/jira-defect-datasets.zip?raw=true)
 
 the JIRA defect datasets can be referenced as:
 
