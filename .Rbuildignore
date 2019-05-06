@@ -3,3 +3,4 @@
 ^\.travis\.yml$
 Makefile
 docs
+jira-defect-datasets.zip

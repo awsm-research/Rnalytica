@@ -2,12 +2,23 @@
 
 An R package of JIRA defect datasets and tool suites for explainable software analytics.
 
-### Install
-To prepare execution enrionment, please run the command below in terminal.
+### Download and Reference for the JIRA defect datasets
 
+[JIRA defect datasets](https://github.com/awsm-research/Rnalytica/blob/master/jira-defect-datasets.zip)
+
+the JIRA defect datasets can be referenced as:
+
+```tex
+@inproceedings{yatish2019icse,
+    Author={Yatish, Suraj and Jiarpakdee, Jirayus and Thongtanunam, Patanamon and Tantithamthavorn, Chakkrit},
+    Title = {Mining Software Defects: Should We Consider Affected Releases?},
+    Booktitle = {The International Conference on Software Engineering (ICSE)},
+    Year = {2019}
+}
 ```
-apt-get install r-base r-base-dev libcurl4-gnutls-dev libcurl4-openssl-dev libssl-dev
-```
+
+### Install an Rnalytica R package
+To prepare execution enrionment, please run the command below in terminal.
 
 Then, install `Rnalytica` with the `devtools` R package:
 ```r
