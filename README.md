@@ -26,7 +26,7 @@ install.packages('devtools')
 devtools::install_github('software-analytics/Rnalytica')
 ```
 
-### Usage
+### Example R Usage
 
 To load the library:
 ```r
@@ -52,3 +52,57 @@ To automatically remove irrelevant metrics and mitigate correlated metrics with 
 ```r
 AutoSpearman(dataset = Data$data, metrics = Data$indep)
 ```
+
+### Example Python Usage (by calling R package)
+
+```python
+import rpy2
+from rpy2.robjects.packages import importr
+from rpy2.robjects import r, pandas2ri, StrVector
+pandas2ri.activate()
+import pandas as pd
+Rnalytica = importr('Rnalytica')
+
+features_names = [
+        'Added_lines', 'Del_lines', 'ADEV', 'OWN_LINE', 'COMM', 'MINOR_LINE', 'CountPath_Mean', 
+        'DDEV', 'CountLine','MaxNesting_Mean','CountClassCoupled','CountStmtDecl',
+        'SumCyclomaticStrict',
+        'OWN_COMMIT', 'MINOR_COMMIT',
+        'CountDeclMethodPrivate', 'AvgLineCode', 
+        'MaxCyclomatic', 'CountDeclMethodDefault', 'AvgEssential',
+        'CountDeclClassVariable',  'AvgCyclomatic',
+        'AvgLine', 'CountDeclClassMethod', 'AvgLineComment',
+        'AvgCyclomaticModified', 'CountDeclFunction', 'CountLineComment',
+        'CountDeclClass', 'CountDeclMethod', 'SumCyclomaticModified',
+        'CountLineCodeDecl', 'CountDeclMethodProtected',
+        'CountDeclInstanceVariable', 'MaxCyclomaticStrict',
+        'CountDeclMethodPublic', 'CountLineCodeExe', 'SumCyclomatic',
+        'SumEssential',  'CountLineCode', 'CountStmtExe',
+        'RatioCommentToCode', 'CountLineBlank', 'CountStmt',
+        'MaxCyclomaticModified', 'CountSemicolon', 'AvgLineBlank',
+        'CountDeclInstanceMethod', 'AvgCyclomaticStrict',
+        'PercentLackOfCohesion', 'MaxInheritanceTree', 'CountClassDerived',
+         'CountClassBase', 'CountInput_Max',
+        'CountInput_Mean', 'CountInput_Min', 'CountOutput_Max',
+        'CountOutput_Mean', 'CountOutput_Min', 'CountPath_Max',
+         'CountPath_Min', 'MaxNesting_Max', 
+        'MaxNesting_Min'
+    ]
+    
+data_train = pd.read_csv("datasets/activemq-5.0.0.csv")
+X_train = data_train[features_names]
+
+results = Rnalytica.AutoSpearman(dataset = X_train, metrics = rpy2.robjects.StrVector(features_names))
+print(results)
+```
+```
+['OWN_LINE' 'COMM' 'CountClassCoupled' 'OWN_COMMIT' 'MINOR_COMMIT'
+ 'CountDeclMethodPrivate' 'CountDeclMethodDefault' 'AvgEssential'
+ 'CountDeclClassVariable' 'CountDeclClassMethod' 'AvgLineComment'
+ 'AvgCyclomaticModified' 'CountDeclClass' 'CountDeclMethodProtected'
+ 'CountDeclInstanceVariable' 'CountDeclMethodPublic' 'RatioCommentToCode'
+ 'AvgLineBlank' 'PercentLackOfCohesion' 'MaxInheritanceTree'
+ 'CountClassDerived' 'CountClassBase' 'CountInput_Mean' 'CountInput_Min'
+ 'CountOutput_Min' 'MaxNesting_Min']
+ ```
+
