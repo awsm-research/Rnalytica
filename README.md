@@ -63,31 +63,20 @@ pandas2ri.activate()
 import pandas as pd
 Rnalytica = importr('Rnalytica')
 
-features_names = [
-        'Added_lines', 'Del_lines', 'ADEV', 'OWN_LINE', 'COMM', 'MINOR_LINE', 'CountPath_Mean', 
-        'DDEV', 'CountLine','MaxNesting_Mean','CountClassCoupled','CountStmtDecl',
-        'SumCyclomaticStrict',
-        'OWN_COMMIT', 'MINOR_COMMIT',
-        'CountDeclMethodPrivate', 'AvgLineCode', 
-        'MaxCyclomatic', 'CountDeclMethodDefault', 'AvgEssential',
-        'CountDeclClassVariable',  'AvgCyclomatic',
-        'AvgLine', 'CountDeclClassMethod', 'AvgLineComment',
-        'AvgCyclomaticModified', 'CountDeclFunction', 'CountLineComment',
-        'CountDeclClass', 'CountDeclMethod', 'SumCyclomaticModified',
-        'CountLineCodeDecl', 'CountDeclMethodProtected',
-        'CountDeclInstanceVariable', 'MaxCyclomaticStrict',
-        'CountDeclMethodPublic', 'CountLineCodeExe', 'SumCyclomatic',
-        'SumEssential',  'CountLineCode', 'CountStmtExe',
-        'RatioCommentToCode', 'CountLineBlank', 'CountStmt',
-        'MaxCyclomaticModified', 'CountSemicolon', 'AvgLineBlank',
-        'CountDeclInstanceMethod', 'AvgCyclomaticStrict',
-        'PercentLackOfCohesion', 'MaxInheritanceTree', 'CountClassDerived',
-         'CountClassBase', 'CountInput_Max',
-        'CountInput_Mean', 'CountInput_Min', 'CountOutput_Max',
-        'CountOutput_Mean', 'CountOutput_Min', 'CountPath_Max',
-         'CountPath_Min', 'MaxNesting_Max', 
-        'MaxNesting_Min'
-    ]
+features_names = ["CountDeclMethodPrivate","AvgLineCode","CountLine","MaxCyclomatic","CountDeclMethodDefault",
+                  "AvgEssential","CountDeclClassVariable","SumCyclomaticStrict","AvgCyclomatic","AvgLine",
+                  "CountDeclClassMethod","AvgLineComment","AvgCyclomaticModified","CountDeclFunction",
+                  "CountLineComment","CountDeclClass","CountDeclMethod","SumCyclomaticModified",
+                  "CountLineCodeDecl","CountDeclMethodProtected","CountDeclInstanceVariable",
+                  "MaxCyclomaticStrict","CountDeclMethodPublic","CountLineCodeExe","SumCyclomatic",
+                  "SumEssential","CountStmtDecl","CountLineCode","CountStmtExe","RatioCommentToCode",
+                  "CountLineBlank","CountStmt","MaxCyclomaticModified","CountSemicolon","AvgLineBlank",
+                  "CountDeclInstanceMethod","AvgCyclomaticStrict","PercentLackOfCohesion","MaxInheritanceTree",
+                  "CountClassDerived","CountClassCoupled","CountClassBase","CountInput_Max","CountInput_Mean",
+                  "CountInput_Min","CountOutput_Max","CountOutput_Mean","CountOutput_Min","CountPath_Max",
+                  "CountPath_Mean","CountPath_Min","MaxNesting_Max","MaxNesting_Mean","MaxNesting_Min",
+                  "COMM","ADEV","DDEV","Added_lines","Del_lines","OWN_LINE","OWN_COMMIT","MINOR_COMMIT",
+                  "MINOR_LINE","MAJOR_COMMIT","MAJOR_LINE"]
     
 data_train = pd.read_csv("datasets/activemq-5.0.0.csv")
 X_train = data_train[features_names]
@@ -96,13 +85,13 @@ results = Rnalytica.AutoSpearman(dataset = X_train, metrics = rpy2.robjects.StrV
 print(results)
 ```
 ```
-['OWN_LINE' 'COMM' 'CountClassCoupled' 'OWN_COMMIT' 'MINOR_COMMIT'
- 'CountDeclMethodPrivate' 'CountDeclMethodDefault' 'AvgEssential'
+['CountDeclMethodPrivate' 'CountDeclMethodDefault' 'AvgEssential'
  'CountDeclClassVariable' 'CountDeclClassMethod' 'AvgLineComment'
  'AvgCyclomaticModified' 'CountDeclClass' 'CountDeclMethodProtected'
  'CountDeclInstanceVariable' 'CountDeclMethodPublic' 'RatioCommentToCode'
  'AvgLineBlank' 'PercentLackOfCohesion' 'MaxInheritanceTree'
- 'CountClassDerived' 'CountClassBase' 'CountInput_Mean' 'CountInput_Min'
- 'CountOutput_Min' 'MaxNesting_Min']
+ 'CountClassDerived' 'CountClassCoupled' 'CountClassBase'
+ 'CountInput_Mean' 'CountInput_Min' 'CountOutput_Min' 'MaxNesting_Min'
+ 'ADEV' 'OWN_LINE' 'OWN_COMMIT' 'MINOR_COMMIT' 'MAJOR_LINE']
  ```
 
