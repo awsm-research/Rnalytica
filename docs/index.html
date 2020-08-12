@@ -72,31 +72,81 @@
   <div class="contents col-md-9">
 <div id="rnalytica-build-status" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#rnalytica-build-status" class="anchor"></a>Rnalytica <a href="https://travis-ci.org/software-analytics/Rnalytica"><img src="https://travis-ci.org/software-analytics/Rnalytica.svg?branch=master" alt="Build Status"></a>
+<a href="#rnalytica-build-status" class="anchor"></a>Rnalytica <a href="https://travis-ci.org/awsm-research/Rnalytica"><img src="https://travis-ci.org/awsm-research/Rnalytica.svg?branch=master" alt="Build Status"></a>
 </h1></div>
 <p>An R package of JIRA defect datasets and tool suites for explainable software analytics.</p>
-<div id="install" class="section level3">
+<div id="download-and-reference-for-the-jira-defect-datasets" class="section level3">
 <h3 class="hasAnchor">
-<a href="#install" class="anchor"></a>Install</h3>
-<p>To prepare execution enrionment, please run the command below in terminal.</p>
-<pre><code>apt-get install r-base r-base-dev libcurl4-gnutls-dev libcurl4-openssl-dev libssl-dev</code></pre>
-<p>Then, install <code>Rnalytica</code> with the <code>devtools</code> R package:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">'devtools'</span>)
-devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">'software-analytics/Rnalytica'</span>)</code></pre></div>
+<a href="#download-and-reference-for-the-jira-defect-datasets" class="anchor"></a>Download and Reference for the JIRA defect datasets</h3>
+<p><a href="https://github.com/awsm-research/Rnalytica/blob/master/jira-defect-datasets.zip?raw=true">JIRA defect datasets</a></p>
+<p>the JIRA defect datasets can be referenced as:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode tex"><code class="sourceCode latex"><a class="sourceLine" id="cb1-1" data-line-number="1">@inproceedings{yatish2019icse,</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2">    Author={Yatish, Suraj and Jiarpakdee, Jirayus and Thongtanunam, Patanamon and Tantithamthavorn, Chakkrit},</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3">    Title = {Mining Software Defects: Should We Consider Affected Releases?},</a>
+<a class="sourceLine" id="cb1-4" data-line-number="4">    Booktitle = {The International Conference on Software Engineering (ICSE)},</a>
+<a class="sourceLine" id="cb1-5" data-line-number="5">    Year = {2019}</a>
+<a class="sourceLine" id="cb1-6" data-line-number="6">}</a></code></pre></div>
 </div>
-<div id="usage" class="section level3">
+<div id="install-an-rnalytica-r-package" class="section level3">
 <h3 class="hasAnchor">
-<a href="#usage" class="anchor"></a>Usage</h3>
+<a href="#install-an-rnalytica-r-package" class="anchor"></a>Install an Rnalytica R package</h3>
+<p>To prepare execution enrionment, please run the command below in terminal.</p>
+<p>Then, install <code>Rnalytica</code> with the <code>devtools</code> R package:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">'devtools'</span>)</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">'software-analytics/Rnalytica'</span>)</a></code></pre></div>
+</div>
+<div id="example-r-usage" class="section level3">
+<h3 class="hasAnchor">
+<a href="#example-r-usage" class="anchor"></a>Example R Usage</h3>
 <p>To load the library:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(Rnalytica)</code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(Rnalytica)</a></code></pre></div>
 <p>To list all 131 defect datasets:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">listDataset</code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">listDataset</a></code></pre></div>
 <p>To load a defect dataset from the Rnalytica R package:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Data =<span class="st"> </span><span class="kw"><a href="reference/loadDefectDataset.html">loadDefectDataset</a></span>(<span class="st">'groovy-1_5_7'</span>,<span class="st">'jira'</span>)</code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">Data =<span class="st"> </span><span class="kw"><a href="reference/loadDefectDataset.html">loadDefectDataset</a></span>(<span class="st">'groovy-1_5_7'</span>,<span class="st">'jira'</span>)</a></code></pre></div>
 <p>To visualize pair-wise correlations among input metrics and presents using a visualization of the hierarchical cluster analysis:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/plotVarClus.html">plotVarClus</a></span>(<span class="dt">dataset =</span> Data<span class="op">$</span>data, <span class="dt">metrics =</span> Data<span class="op">$</span>indep)</code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="reference/plotVarClus.html">plotVarClus</a></span>(<span class="dt">dataset =</span> Data<span class="op">$</span>data, <span class="dt">metrics =</span> Data<span class="op">$</span>indep)</a></code></pre></div>
 <p>To automatically remove irrelevant metrics and mitigate correlated metrics with AutoSpearman:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/AutoSpearman.html">AutoSpearman</a></span>(<span class="dt">dataset =</span> Data<span class="op">$</span>data, <span class="dt">metrics =</span> Data<span class="op">$</span>indep)</code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw"><a href="reference/AutoSpearman.html">AutoSpearman</a></span>(<span class="dt">dataset =</span> Data<span class="op">$</span>data, <span class="dt">metrics =</span> Data<span class="op">$</span>indep)</a></code></pre></div>
+</div>
+<div id="example-python-usage-by-calling-r-package" class="section level3">
+<h3 class="hasAnchor">
+<a href="#example-python-usage-by-calling-r-package" class="anchor"></a>Example Python Usage (by calling R package)</h3>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="im">import</span> rpy2</a>
+<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="im">from</span> rpy2.robjects.packages <span class="im">import</span> importr</a>
+<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="im">from</span> rpy2.robjects <span class="im">import</span> r, pandas2ri, StrVector</a>
+<a class="sourceLine" id="cb8-4" data-line-number="4">pandas2ri.activate()</a>
+<a class="sourceLine" id="cb8-5" data-line-number="5"><span class="im">import</span> pandas <span class="im">as</span> pd</a>
+<a class="sourceLine" id="cb8-6" data-line-number="6">Rnalytica <span class="op">=</span> importr(<span class="st">'Rnalytica'</span>)</a>
+<a class="sourceLine" id="cb8-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb8-8" data-line-number="8">features_names <span class="op">=</span> [<span class="st">"CountDeclMethodPrivate"</span>,<span class="st">"AvgLineCode"</span>,<span class="st">"CountLine"</span>,<span class="st">"MaxCyclomatic"</span>,<span class="st">"CountDeclMethodDefault"</span>,</a>
+<a class="sourceLine" id="cb8-9" data-line-number="9">                  <span class="st">"AvgEssential"</span>,<span class="st">"CountDeclClassVariable"</span>,<span class="st">"SumCyclomaticStrict"</span>,<span class="st">"AvgCyclomatic"</span>,<span class="st">"AvgLine"</span>,</a>
+<a class="sourceLine" id="cb8-10" data-line-number="10">                  <span class="st">"CountDeclClassMethod"</span>,<span class="st">"AvgLineComment"</span>,<span class="st">"AvgCyclomaticModified"</span>,<span class="st">"CountDeclFunction"</span>,</a>
+<a class="sourceLine" id="cb8-11" data-line-number="11">                  <span class="st">"CountLineComment"</span>,<span class="st">"CountDeclClass"</span>,<span class="st">"CountDeclMethod"</span>,<span class="st">"SumCyclomaticModified"</span>,</a>
+<a class="sourceLine" id="cb8-12" data-line-number="12">                  <span class="st">"CountLineCodeDecl"</span>,<span class="st">"CountDeclMethodProtected"</span>,<span class="st">"CountDeclInstanceVariable"</span>,</a>
+<a class="sourceLine" id="cb8-13" data-line-number="13">                  <span class="st">"MaxCyclomaticStrict"</span>,<span class="st">"CountDeclMethodPublic"</span>,<span class="st">"CountLineCodeExe"</span>,<span class="st">"SumCyclomatic"</span>,</a>
+<a class="sourceLine" id="cb8-14" data-line-number="14">                  <span class="st">"SumEssential"</span>,<span class="st">"CountStmtDecl"</span>,<span class="st">"CountLineCode"</span>,<span class="st">"CountStmtExe"</span>,<span class="st">"RatioCommentToCode"</span>,</a>
+<a class="sourceLine" id="cb8-15" data-line-number="15">                  <span class="st">"CountLineBlank"</span>,<span class="st">"CountStmt"</span>,<span class="st">"MaxCyclomaticModified"</span>,<span class="st">"CountSemicolon"</span>,<span class="st">"AvgLineBlank"</span>,</a>
+<a class="sourceLine" id="cb8-16" data-line-number="16">                  <span class="st">"CountDeclInstanceMethod"</span>,<span class="st">"AvgCyclomaticStrict"</span>,<span class="st">"PercentLackOfCohesion"</span>,<span class="st">"MaxInheritanceTree"</span>,</a>
+<a class="sourceLine" id="cb8-17" data-line-number="17">                  <span class="st">"CountClassDerived"</span>,<span class="st">"CountClassCoupled"</span>,<span class="st">"CountClassBase"</span>,<span class="st">"CountInput_Max"</span>,<span class="st">"CountInput_Mean"</span>,</a>
+<a class="sourceLine" id="cb8-18" data-line-number="18">                  <span class="st">"CountInput_Min"</span>,<span class="st">"CountOutput_Max"</span>,<span class="st">"CountOutput_Mean"</span>,<span class="st">"CountOutput_Min"</span>,<span class="st">"CountPath_Max"</span>,</a>
+<a class="sourceLine" id="cb8-19" data-line-number="19">                  <span class="st">"CountPath_Mean"</span>,<span class="st">"CountPath_Min"</span>,<span class="st">"MaxNesting_Max"</span>,<span class="st">"MaxNesting_Mean"</span>,<span class="st">"MaxNesting_Min"</span>,</a>
+<a class="sourceLine" id="cb8-20" data-line-number="20">                  <span class="st">"COMM"</span>,<span class="st">"ADEV"</span>,<span class="st">"DDEV"</span>,<span class="st">"Added_lines"</span>,<span class="st">"Del_lines"</span>,<span class="st">"OWN_LINE"</span>,<span class="st">"OWN_COMMIT"</span>,<span class="st">"MINOR_COMMIT"</span>,</a>
+<a class="sourceLine" id="cb8-21" data-line-number="21">                  <span class="st">"MINOR_LINE"</span>,<span class="st">"MAJOR_COMMIT"</span>,<span class="st">"MAJOR_LINE"</span>]</a>
+<a class="sourceLine" id="cb8-22" data-line-number="22">    </a>
+<a class="sourceLine" id="cb8-23" data-line-number="23">data_train <span class="op">=</span> pd.read_csv(<span class="st">"datasets/activemq-5.0.0.csv"</span>)</a>
+<a class="sourceLine" id="cb8-24" data-line-number="24">X_train <span class="op">=</span> data_train[features_names]</a>
+<a class="sourceLine" id="cb8-25" data-line-number="25"></a>
+<a class="sourceLine" id="cb8-26" data-line-number="26">results <span class="op">=</span> Rnalytica.AutoSpearman(dataset <span class="op">=</span> X_train, metrics <span class="op">=</span> rpy2.robjects.StrVector(features_names))</a>
+<a class="sourceLine" id="cb8-27" data-line-number="27"><span class="bu">print</span>(results)</a></code></pre></div>
+<pre><code>['CountDeclMethodPrivate' 'CountDeclMethodDefault' 'AvgEssential'
+ 'CountDeclClassVariable' 'CountDeclClassMethod' 'AvgLineComment'
+ 'AvgCyclomaticModified' 'CountDeclClass' 'CountDeclMethodProtected'
+ 'CountDeclInstanceVariable' 'CountDeclMethodPublic' 'RatioCommentToCode'
+ 'AvgLineBlank' 'PercentLackOfCohesion' 'MaxInheritanceTree'
+ 'CountClassDerived' 'CountClassCoupled' 'CountClassBase'
+ 'CountInput_Mean' 'CountInput_Min' 'CountOutput_Min' 'MaxNesting_Min'
+ 'ADEV' 'OWN_LINE' 'OWN_COMMIT' 'MINOR_COMMIT' 'MAJOR_LINE']</code></pre>
 </div>
 </div>
   </div>

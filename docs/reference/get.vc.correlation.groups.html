@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Universal fit function (Parallel) — fit.parallel • Rnalytica</title>
+<title>Get correlation groups according to VarClus based on the absolute Spearman correlation coefficients between metrics — get.vc.correlation.groups • Rnalytica</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Universal fit function (Parallel) — fit.parallel" />
+<meta property="og:title" content="Get correlation groups according to VarClus based on the absolute Spearman correlation coefficients between metrics — get.vc.correlation.groups" />
 
-<meta property="og:description" content="Universal fit function (Parallel)" />
+<meta property="og:description" content="This function makes life simple by providing a VarClus." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -105,79 +105,38 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Universal fit function (Parallel)</h1>
-    <small class="dont-index">Source: <a href='https://github.com/software-analytics/Rnalytica/blob/master/R/fit.parallel.R'><code>R/fit.parallel.R</code></a></small>
-    <div class="hidden name"><code>fit.parallel.Rd</code></div>
+    <h1>Get correlation groups according to VarClus based on the absolute Spearman correlation coefficients between metrics</h1>
+    <small class="dont-index">Source: <a href='https://github.com/software-analytics/Rnalytica/blob/master/R/get.vc.correlation.groups.R'><code>R/get.vc.correlation.groups.R</code></a></small>
+    <div class="hidden name"><code>get.vc.correlation.groups.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Universal fit function (Parallel)</p>
+    <p>This function makes life simple by providing a VarClus.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>fit.parallel</span>(<span class='no'>data</span>, <span class='no'>dep</span>, <span class='no'>indep</span>, <span class='kw'>classifier</span> <span class='kw'>=</span> <span class='st'>"lr"</span>,
-  <span class='kw'>classifier.params</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>rf.ntree</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>rf.mtry</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>c5.0.trials</span> <span class='kw'>=</span>
-  <span class='fl'>40</span>, <span class='kw'>c5.0.rules</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>c5.0.winnow</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>nb.fL</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>nb.adjust</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>svm.gamma</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>svm.cost</span> <span class='kw'>=</span> <span class='fl'>1</span>), <span class='kw'>params.tuning</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>normalize</span> <span class='kw'>=</span> <span class='st'>"no"</span>, <span class='kw'>rebalance</span> <span class='kw'>=</span> <span class='st'>"no"</span>, <span class='kw'>validation</span> <span class='kw'>=</span> <span class='st'>"boot"</span>,
-  <span class='kw'>validation.params</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>cv.k</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>boot.n</span> <span class='kw'>=</span> <span class='fl'>100</span>),
-  <span class='kw'>prob.threshold</span> <span class='kw'>=</span> <span class='fl'>0.5</span>, <span class='kw'>repeats</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>n.cores</span> <span class='kw'>=</span> <span class='fl'>2</span>)</pre>
+    <pre class="usage"><span class='fu'>get.vc.correlation.groups</span>(<span class='no'>dataset</span>, <span class='no'>metrics</span>, <span class='kw'>similarity</span> <span class='kw'>=</span> <span class='st'>"spearman"</span>,
+  <span class='kw'>varclus.threshold</span> <span class='kw'>=</span> <span class='fl'>0.7</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>data</th>
-      <td><p>a dataframe for input data</p></td>
+      <th>dataset</th>
+      <td><p>a data frame for data</p></td>
     </tr>
     <tr>
-      <th>dep</th>
-      <td><p>a character for dependent variable</p></td>
+      <th>metrics</th>
+      <td><p>a vector of characters or a vector of characters for independent variables</p></td>
     </tr>
     <tr>
-      <th>indep</th>
-      <td><p>a vector of characters for independent variables</p></td>
+      <th>similarity</th>
+      <td><p>a character for similarity measures (e.g., Spearman rank correlation), default = spearman</p></td>
     </tr>
     <tr>
-      <th>classifier</th>
-      <td><p>a character for classifier techniques, i.e., lr, rf, c5.0, nb, and svm</p></td>
-    </tr>
-    <tr>
-      <th>classifier.params</th>
-      <td><p>a list of parameters for an input classifier technique</p></td>
-    </tr>
-    <tr>
-      <th>params.tuning</th>
-      <td><p>a boolean indicates whether to perform parameters tuning</p></td>
-    </tr>
-    <tr>
-      <th>normalize</th>
-      <td><p>a character for normalization techniques, i.e., log, scale, center, standardize, and no for non-normalization#'</p></td>
-    </tr>
-    <tr>
-      <th>rebalance</th>
-      <td><p>a character for a choice of data sampling techniques, i.e., up for upsampling, down for downsampling, and no for no-sampling (default: "NO")</p></td>
-    </tr>
-    <tr>
-      <th>validation</th>
-      <td><p>a character for a choice of validation techniques, i.e., boot for bootstrap validation technique, cv for cross-validation technique, and no for constructing a model with the whole dataset without model validation (default: "boot")</p></td>
-    </tr>
-    <tr>
-      <th>validation.params</th>
-      <td><p>a list of parameters for an input validation techniques (default: list(cv.k = 10, boot.n = 100))</p></td>
-    </tr>
-    <tr>
-      <th>prob.threshold</th>
-      <td><p>a numeric for probability threshold (default: 0.5)</p></td>
-    </tr>
-    <tr>
-      <th>repeats</th>
-      <td><p>a numeric for number of repetitions (default: 1)</p></td>
-    </tr>
-    <tr>
-      <th>n.cores</th>
-      <td><p>a numeric for number of cores (default: 2)</p></td>
+      <th>varclus.threshold</th>
+      <td><p>a numeric for correlation coefficient threshold value</p></td>
     </tr>
     </table>
     

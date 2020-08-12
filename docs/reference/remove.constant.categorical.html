@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Universal fit function (Parallel) — fit.parallel • Rnalytica</title>
+<title>Remove constant metrics and categorical metrics — remove.constant.categorical • Rnalytica</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Universal fit function (Parallel) — fit.parallel" />
+<meta property="og:title" content="Remove constant metrics and categorical metrics — remove.constant.categorical" />
 
-<meta property="og:description" content="Universal fit function (Parallel)" />
+<meta property="og:description" content="Remove constant metrics and categorical metrics" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -105,89 +105,76 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Universal fit function (Parallel)</h1>
-    <small class="dont-index">Source: <a href='https://github.com/software-analytics/Rnalytica/blob/master/R/fit.parallel.R'><code>R/fit.parallel.R</code></a></small>
-    <div class="hidden name"><code>fit.parallel.Rd</code></div>
+    <h1>Remove constant metrics and categorical metrics</h1>
+    <small class="dont-index">Source: <a href='https://github.com/software-analytics/Rnalytica/blob/master/R/remove.constant.categorical.R'><code>R/remove.constant.categorical.R</code></a></small>
+    <div class="hidden name"><code>remove.constant.categorical.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Universal fit function (Parallel)</p>
+    <p>Remove constant metrics and categorical metrics</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>fit.parallel</span>(<span class='no'>data</span>, <span class='no'>dep</span>, <span class='no'>indep</span>, <span class='kw'>classifier</span> <span class='kw'>=</span> <span class='st'>"lr"</span>,
-  <span class='kw'>classifier.params</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>rf.ntree</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>rf.mtry</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>c5.0.trials</span> <span class='kw'>=</span>
-  <span class='fl'>40</span>, <span class='kw'>c5.0.rules</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>c5.0.winnow</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>nb.fL</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>nb.adjust</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>svm.gamma</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>svm.cost</span> <span class='kw'>=</span> <span class='fl'>1</span>), <span class='kw'>params.tuning</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>normalize</span> <span class='kw'>=</span> <span class='st'>"no"</span>, <span class='kw'>rebalance</span> <span class='kw'>=</span> <span class='st'>"no"</span>, <span class='kw'>validation</span> <span class='kw'>=</span> <span class='st'>"boot"</span>,
-  <span class='kw'>validation.params</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>cv.k</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>boot.n</span> <span class='kw'>=</span> <span class='fl'>100</span>),
-  <span class='kw'>prob.threshold</span> <span class='kw'>=</span> <span class='fl'>0.5</span>, <span class='kw'>repeats</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>n.cores</span> <span class='kw'>=</span> <span class='fl'>2</span>)</pre>
+    <pre class="usage"><span class='fu'>remove.constant.categorical</span>(<span class='no'>dataset</span>, <span class='no'>metrics</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>data</th>
-      <td><p>a dataframe for input data</p></td>
+      <th>dataset</th>
+      <td><p>a data frame for data</p></td>
     </tr>
     <tr>
-      <th>dep</th>
-      <td><p>a character for dependent variable</p></td>
-    </tr>
-    <tr>
-      <th>indep</th>
-      <td><p>a vector of characters for independent variables</p></td>
-    </tr>
-    <tr>
-      <th>classifier</th>
-      <td><p>a character for classifier techniques, i.e., lr, rf, c5.0, nb, and svm</p></td>
-    </tr>
-    <tr>
-      <th>classifier.params</th>
-      <td><p>a list of parameters for an input classifier technique</p></td>
-    </tr>
-    <tr>
-      <th>params.tuning</th>
-      <td><p>a boolean indicates whether to perform parameters tuning</p></td>
-    </tr>
-    <tr>
-      <th>normalize</th>
-      <td><p>a character for normalization techniques, i.e., log, scale, center, standardize, and no for non-normalization#'</p></td>
-    </tr>
-    <tr>
-      <th>rebalance</th>
-      <td><p>a character for a choice of data sampling techniques, i.e., up for upsampling, down for downsampling, and no for no-sampling (default: "NO")</p></td>
-    </tr>
-    <tr>
-      <th>validation</th>
-      <td><p>a character for a choice of validation techniques, i.e., boot for bootstrap validation technique, cv for cross-validation technique, and no for constructing a model with the whole dataset without model validation (default: "boot")</p></td>
-    </tr>
-    <tr>
-      <th>validation.params</th>
-      <td><p>a list of parameters for an input validation techniques (default: list(cv.k = 10, boot.n = 100))</p></td>
-    </tr>
-    <tr>
-      <th>prob.threshold</th>
-      <td><p>a numeric for probability threshold (default: 0.5)</p></td>
-    </tr>
-    <tr>
-      <th>repeats</th>
-      <td><p>a numeric for number of repetitions (default: 1)</p></td>
-    </tr>
-    <tr>
-      <th>n.cores</th>
-      <td><p>a numeric for number of cores (default: 2)</p></td>
+      <th>metrics</th>
+      <td><p>a characters or a vector of characters for independent variables</p></td>
     </tr>
     </table>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='no'>Data</span> <span class='kw'>=</span> <span class='fu'><a href='loadDefectDataset.html'>loadDefectDataset</a></span>(<span class='st'>'groovy-1_5_7'</span>,<span class='st'>'jira'</span>)
+<span class='fu'>remove.constant.categorical</span>(<span class='kw'>dataset</span> <span class='kw'>=</span> <span class='no'>Data</span>$<span class='no'>data</span>, <span class='kw'>metrics</span> <span class='kw'>=</span> <span class='no'>Data</span>$<span class='no'>indep</span>)</div><div class='output co'>#&gt;  [1] "CountDeclMethodPrivate"    "AvgLineCode"              
+#&gt;  [3] "CountLine"                 "MaxCyclomatic"            
+#&gt;  [5] "CountDeclMethodDefault"    "AvgEssential"             
+#&gt;  [7] "CountDeclClassVariable"    "SumCyclomaticStrict"      
+#&gt;  [9] "AvgCyclomatic"             "AvgLine"                  
+#&gt; [11] "CountDeclClassMethod"      "AvgLineComment"           
+#&gt; [13] "AvgCyclomaticModified"     "CountDeclFunction"        
+#&gt; [15] "CountLineComment"          "CountDeclClass"           
+#&gt; [17] "CountDeclMethod"           "SumCyclomaticModified"    
+#&gt; [19] "CountLineCodeDecl"         "CountDeclMethodProtected" 
+#&gt; [21] "CountDeclInstanceVariable" "MaxCyclomaticStrict"      
+#&gt; [23] "CountDeclMethodPublic"     "CountLineCodeExe"         
+#&gt; [25] "SumCyclomatic"             "SumEssential"             
+#&gt; [27] "CountStmtDecl"             "CountLineCode"            
+#&gt; [29] "CountStmtExe"              "RatioCommentToCode"       
+#&gt; [31] "CountLineBlank"            "CountStmt"                
+#&gt; [33] "MaxCyclomaticModified"     "CountSemicolon"           
+#&gt; [35] "AvgLineBlank"              "CountDeclInstanceMethod"  
+#&gt; [37] "AvgCyclomaticStrict"       "PercentLackOfCohesion"    
+#&gt; [39] "MaxInheritanceTree"        "CountClassDerived"        
+#&gt; [41] "CountClassCoupled"         "CountClassBase"           
+#&gt; [43] "CountInput_Max"            "CountInput_Mean"          
+#&gt; [45] "CountInput_Min"            "CountOutput_Max"          
+#&gt; [47] "CountOutput_Mean"          "CountOutput_Min"          
+#&gt; [49] "CountPath_Max"             "CountPath_Mean"           
+#&gt; [51] "CountPath_Min"             "MaxNesting_Max"           
+#&gt; [53] "MaxNesting_Mean"           "MaxNesting_Min"           
+#&gt; [55] "COMM"                      "ADEV"                     
+#&gt; [57] "DDEV"                      "Added_lines"              
+#&gt; [59] "Del_lines"                 "OWN_LINE"                 
+#&gt; [61] "OWN_COMMIT"                "MINOR_COMMIT"             
+#&gt; [63] "MINOR_LINE"                "MAJOR_COMMIT"             
+#&gt; [65] "MAJOR_LINE"               </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-                </ul>
+            
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>

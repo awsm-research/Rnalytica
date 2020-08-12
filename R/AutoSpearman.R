@@ -21,15 +21,25 @@ AutoSpearman <-
            metrics,
            spearman.threshold = 0.7,
            vif.threshold = 5,
+           groups = FALSE,
            verbose = F) {
     # Remove constant metrics and categorical metrics
     metrics <- remove.constant.categorical(dataset, metrics)
     
-    
-    spearman.metrics <-
-      get.automated.spearman(dataset, metrics, spearman.threshold, verbose)
-    AutoSpearman.metrics <-
-      stepwise.vif(dataset, spearman.metrics, vif.threshold, verbose)
-    
-    return(AutoSpearman.metrics)
+    if(groups == TRUE){
+      metrics <- remove.constant.categorical(dataset, metrics)
+      spearman_df_metrics <- get.automated.spearman_Group(dataset, metrics, 
+                                                          spearman.threshold, verbose)
+      AutoSpearman.metrics <- stepwise.vif(spearman_df_metrics$dataset, spearman_df_metrics$selected.metrics, 
+                                           vif.threshold, verbose)
+      
+      return((lapply(AutoSpearman.metrics, function(y) strsplit(y, '__')[[1]])))
+    }else{
+      spearman.metrics <-
+        get.automated.spearman(dataset, metrics, spearman.threshold, verbose)
+      AutoSpearman.metrics <-
+        stepwise.vif(dataset, spearman.metrics, vif.threshold, verbose)
+      
+      return(AutoSpearman.metrics)
+    }
   }
